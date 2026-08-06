@@ -18,18 +18,21 @@
       </Border>
 
       <Border Classes="subtle">
-        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="6">
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="6">
           <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="SETTINGS" />
           <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SettingsGroupText}" TextWrapping="Wrap" />
 
-          <TextBlock Grid.Row="1" Grid.Column="0" Classes="caption" Text="FINGERPRINT" />
-          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SettingsFingerprintText}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="1" Grid.Column="0" Classes="caption" Text="SOURCE FP" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding EvidenceSourceFingerprintText}" TextWrapping="Wrap" />
 
-          <TextBlock Grid.Row="2" Grid.Column="0" Classes="caption" Text="TRUST" />
-          <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TrustStateText}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="2" Grid.Column="0" Classes="caption" Text="SETTINGS FP" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SettingsFingerprintText}" TextWrapping="Wrap" />
 
-          <TextBlock Grid.Row="3" Grid.Column="0" Classes="caption" Text="OPERATION" />
-          <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding FaceplateDetailText}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="3" Grid.Column="0" Classes="caption" Text="TRUST" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TrustStateText}" TextWrapping="Wrap" />
+
+          <TextBlock Grid.Row="4" Grid.Column="0" Classes="caption" Text="OPERATION" />
+          <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding EvidenceOperationSummary}" TextWrapping="Wrap" />
         </Grid>
       </Border>
 
