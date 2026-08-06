@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Windows.Input;
 using Arvrel.Desktop.Infrastructure;
 using Arvrel.Protection;
@@ -15,6 +16,8 @@ public sealed partial class MainWindowViewModel
     }
 
     private readonly RelayAnnunciationLatch _relayAnnunciationLatch = new();
+    private readonly RelayOperationRecorder _internalOperationRecorder = new();
+    private readonly RelayOperationRecorder _processBusOperationRecorder = new();
     private RelayAnnunciationSnapshot _relayAnnunciation = new(
         PickupActive: false,
         TripLatched: false,
@@ -22,6 +25,8 @@ public sealed partial class MainWindowViewModel
         PhaseB: RelayLampState.Off,
         PhaseC: RelayLampState.Off,
         Earth: RelayLampState.Off);
+    private RelayOperationRecord? _internalOperationRecord;
+    private string? _processBusOperationStreamKey;
     private FaceplatePage _faceplatePage;
     private string _faceplateNavigationText = "MEASURE · HOME";
     private RelayCommand? _faceplateMeasureCommand;
@@ -40,6 +45,7 @@ public sealed partial class MainWindowViewModel
     public RelayLampState PhaseBAnnunciation => DisplayAnnunciation.PhaseB;
     public RelayLampState PhaseCAnnunciation => DisplayAnnunciation.PhaseC;
     public RelayLampState EarthAnnunciation => DisplayAnnunciation.Earth;
+    public RelayOperationRecord? CurrentOperationRecord => ResolveCurrentOperationRecord();
 
     public string FaceplatePageName => _faceplatePage.ToString().ToUpperInvariant();
     public string FaceplateNavigationText => _faceplateNavigationText;
@@ -80,7 +86,7 @@ public sealed partial class MainWindowViewModel
     {
         FaceplatePage.Measure => PhaseAText,
         FaceplatePage.Events => EventAt(0),
-        FaceplatePage.Records => TripLatched ? "TRIP LATCHED" : PickupActive ? "PICKUP" : "READY",
+        FaceplatePage.Records => FormatOperationState(CurrentOperationRecord),
         _ => SettingsGroupText
     };
 
@@ -88,7 +94,7 @@ public sealed partial class MainWindowViewModel
     {
         FaceplatePage.Measure => PhaseBText,
         FaceplatePage.Events => EventAt(1),
-        FaceplatePage.Records => Compact(DisplayActiveElement, 24),
+        FaceplatePage.Records => FormatOperationElement(CurrentOperationRecord),
         _ => Compact(DisplayProfileNameText, 24)
     };
 
@@ -96,7 +102,9 @@ public sealed partial class MainWindowViewModel
     {
         FaceplatePage.Measure => PhaseCText,
         FaceplatePage.Events => EventAt(2),
-        FaceplatePage.Records => DisplayFingerprintText,
+        FaceplatePage.Records => IsProcessBusDisplayActive
+            ? Compact(ActiveDisplaySourceText, 24)
+            : DisplayFingerprintText,
         _ => FrequencyTextDisplay
     };
 
@@ -112,9 +120,7 @@ public sealed partial class MainWindowViewModel
     {
         FaceplatePage.Measure => DecisionReason,
         FaceplatePage.Events => $"{Events.Count} recent operator events · newest first",
-        FaceplatePage.Records => TripLatched
-            ? DecisionReason
-            : "No latched operation evidence. Pickup and trip causes are captured by the selected portable relay core.",
+        FaceplatePage.Records => FormatOperationDetail(CurrentOperationRecord),
         _ => $"{SourceModeText} · {DisplayProvenanceText}"
     };
 
@@ -152,7 +158,32 @@ public sealed partial class MainWindowViewModel
         _faceplateOkCommand ??= new RelayCommand(ConfirmFaceplatePage);
 
     private void UpdateFaceplateState(ProtectionSnapshot snapshot)
-        => _relayAnnunciation = _relayAnnunciationLatch.Observe(snapshot);
+    {
+        _relayAnnunciation = _relayAnnunciationLatch.Observe(snapshot);
+        var transition = _internalOperationRecorder.Observe(snapshot, _currentTick.Scenario.Measurement);
+        _internalOperationRecord = transition.Operation ?? _internalOperationRecorder.Current;
+    }
+
+    private RelayOperationRecord? ResolveCurrentOperationRecord()
+    {
+        if (!IsProcessBusDisplayActive)
+            return _internalOperationRecord ?? _internalOperationRecorder.Current;
+
+        var streamKey = _processBusSnapshot.Stream.Key;
+        if (string.IsNullOrWhiteSpace(streamKey))
+            return null;
+
+        if (!string.Equals(_processBusOperationStreamKey, streamKey, StringComparison.Ordinal))
+        {
+            _processBusOperationRecorder.ResetCurrent();
+            _processBusOperationStreamKey = streamKey;
+        }
+
+        _processBusOperationRecorder.Observe(
+            _processBusSnapshot.Protection,
+            _processBusSnapshot.Measurement);
+        return _processBusOperationRecorder.Current;
+    }
 
     private void SelectFaceplatePage(FaceplatePage page, string source)
     {
@@ -180,6 +211,44 @@ public sealed partial class MainWindowViewModel
         if (index < 0 || index >= Events.Count)
             return "—";
         return Compact(Events[index], 34);
+    }
+
+    private static string FormatOperationState(RelayOperationRecord? record)
+    {
+        if (record is null)
+            return "READY · NO RECORD";
+        return record.TripTimestamp.HasValue
+            ? $"TRIP · #{record.Sequence:0000}"
+            : $"PICKUP · #{record.Sequence:0000}";
+    }
+
+    private static string FormatOperationElement(RelayOperationRecord? record)
+    {
+        if (record is null)
+            return "—";
+        var element = record.TripTimestamp.HasValue && !string.IsNullOrWhiteSpace(record.TripElement)
+            ? record.TripElement
+            : record.PickupElement;
+        return Compact(element, 24);
+    }
+
+    private static string FormatOperationDetail(RelayOperationRecord? record)
+    {
+        if (record is null)
+            return "No pickup or trip operation has been recorded for the displayed source.";
+
+        var quantity = record.TripTimestamp.HasValue
+            ? record.TripQuantity
+            : record.PickupQuantity;
+        var quantityText = string.Create(
+            CultureInfo.InvariantCulture,
+            $"{record.QuantitySymbol} {quantity:0.###} {record.QuantityUnit}");
+
+        if (record.OperateTime is not { } operateTime)
+            return $"Pickup {record.PickupTimestamp:HH:mm:ss.fff} · {quantityText} · timing active";
+
+        return $"Pickup {record.PickupTimestamp:HH:mm:ss.fff} · Trip {record.TripTimestamp:HH:mm:ss.fff} · " +
+               $"operate {operateTime.TotalMilliseconds:0.0} ms · {quantityText}";
     }
 
     private static string Compact(string? value, int maximumLength)
