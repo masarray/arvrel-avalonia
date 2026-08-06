@@ -1,0 +1,66 @@
+name: Avalonia cross-platform CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout ARVREL Avalonia
+        uses: actions/checkout@v4
+        with:
+          path: arvrel-avalonia
+          persist-credentials: false
+
+      - name: Checkout pinned ARIEC61850 engine
+        uses: actions/checkout@v4
+        with:
+          repository: masarray/ARIEC61850
+          ref: c1afc68c9931e857eb787b0f249db2c2b0b757c4
+          path: ARIEC61850
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore
+        working-directory: arvrel-avalonia/desktop
+        run: dotnet restore ARVREL.Desktop.sln
+
+      - name: Build
+        working-directory: arvrel-avalonia/desktop
+        run: dotnet build ARVREL.Desktop.sln -c Release --no-restore
+
+      - name: Test Avalonia desktop solution
+        working-directory: arvrel-avalonia/desktop
+        run: dotnet test ARVREL.Desktop.sln -c Release --no-build
+
+      - name: Test shared core projects
+        shell: pwsh
+        run: |
+          $projects = @(
+            'arvrel-avalonia/tests/Arvrel.Application.Tests/Arvrel.Application.Tests.csproj',
+            'arvrel-avalonia/tests/Arvrel.Capture.Tests/Arvrel.Capture.Tests.csproj',
+            'arvrel-avalonia/tests/Arvrel.ProcessBus.Tests/Arvrel.ProcessBus.Tests.csproj',
+            'arvrel-avalonia/tests/Arvrel.Protection.Tests/Arvrel.Protection.Tests.csproj'
+          )
+          foreach ($project in $projects) {
+            dotnet test $project -c Release
+            if ($LASTEXITCODE -ne 0) { throw "Tests failed: $project" }
+          }

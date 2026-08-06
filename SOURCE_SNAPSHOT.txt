@@ -1,0 +1,5 @@
+ARVREL Avalonia repository export
+Source repository: https://github.com/masarray/arvrel
+Export branch commit: 5cf663272eba4945843e573704f3f0538967572b
+Final Avalonia migration source commit: 8ecec49933f7043c77a8f93b30d0cfe9803d5fff
+Generated UTC: 2026-08-06T10:58:05Z
