@@ -88,16 +88,20 @@ public sealed class VirtualRelayFaceplateSourceTests
     }
 
     [TestMethod]
-    public void MainWindow_MountsFaceplateAsFirstOperatorTab()
+    public void MainWindow_MountsFaceplateNativelyInTheP6Overview()
     {
+        var xaml = Read("src", "Arvrel.Desktop", "MainWindow.axaml");
         var source = Read("src", "Arvrel.Desktop", "MainWindow.axaml.cs");
 
-        StringAssert.Contains(source, "InstallVirtualRelayFaceplate()");
-        StringAssert.Contains(source, "new VirtualRelayFaceplate");
-        StringAssert.Contains(source, "Header = \"FACEPLATE\"");
-        StringAssert.Contains(source, "relayTabs.Items.Insert(0");
-        StringAssert.Contains(source, "relayTabs.SelectedIndex = 0");
-        StringAssert.Contains(source, "DataContextChanged");
+        _ = XDocument.Parse(xaml, LoadOptions.PreserveWhitespace);
+
+        StringAssert.Contains(xaml, "<controls:VirtualRelayFaceplate");
+        StringAssert.Contains(xaml, "Background=\"#050708\"");
+        StringAssert.Contains(xaml, "Grid.Column=\"2\"");
+        StringAssert.Contains(xaml, "SMV waveform");
+        StringAssert.Contains(xaml, "Protection operation");
+        Assert.IsFalse(source.Contains("InstallVirtualRelayFaceplate", StringComparison.Ordinal));
+        Assert.IsFalse(source.Contains("GetLogicalDescendants", StringComparison.Ordinal));
     }
 
     private static int Count(string source, string token)

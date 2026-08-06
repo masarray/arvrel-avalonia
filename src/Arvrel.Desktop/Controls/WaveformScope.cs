@@ -12,17 +12,18 @@ public sealed class WaveformScope : Control
         AvaloniaProperty.Register<WaveformScope, ScenarioWaveform?>(nameof(Waveform));
 
     private static readonly IBrush TickLabelBrush = new SolidColorBrush(Color.Parse("#8FA7B2"));
+    private static readonly IBrush StrongLabelBrush = new SolidColorBrush(Color.Parse("#B9C7CE"));
     private static readonly Pen MinorGridPen = new(new SolidColorBrush(Color.Parse("#192A33")), 1);
-    private static readonly Pen MajorGridPen = new(new SolidColorBrush(Color.Parse("#243A45")), 1);
-    private static readonly Pen CycleGridPen = new(new SolidColorBrush(Color.Parse("#355563")), 1.2);
-    private static readonly Pen LaneBoundaryPen = new(new SolidColorBrush(Color.Parse("#20343E")), 1);
-    private static readonly Pen ZeroLinePen = new(new SolidColorBrush(Color.Parse("#2F4A56")), 1.1);
-    private static readonly Pen AxisPen = new(new SolidColorBrush(Color.Parse("#486571")), 1);
-    private static readonly Pen PhaseAPen = new(new SolidColorBrush(Color.Parse("#55B5D0")), 1.6);
-    private static readonly Pen PhaseBPen = new(new SolidColorBrush(Color.Parse("#79C88C")), 1.6);
-    private static readonly Pen PhaseCPen = new(new SolidColorBrush(Color.Parse("#D9B66F")), 1.6);
-    private static readonly Pen ResidualPen = new(new SolidColorBrush(Color.Parse("#D77A7A")), 1.6);
+    private static readonly Pen MajorGridPen = new(new SolidColorBrush(Color.Parse("#29414D")), 1);
+    private static readonly Pen CycleGridPen = new(new SolidColorBrush(Color.Parse("#3C5D6B")), 1.2);
+    private static readonly Pen ZeroLinePen = new(new SolidColorBrush(Color.Parse("#4A6571")), 1.1);
+    private static readonly Pen AxisPen = new(new SolidColorBrush(Color.Parse("#55717D")), 1);
+    private static readonly Pen PhaseAPen = new(new SolidColorBrush(Color.Parse("#F04F55")), 2.0);
+    private static readonly Pen PhaseBPen = new(new SolidColorBrush(Color.Parse("#F2C84B")), 1.9);
+    private static readonly Pen PhaseCPen = new(new SolidColorBrush(Color.Parse("#4B91EA")), 1.9);
+    private static readonly Pen ResidualPen = new(new SolidColorBrush(Color.Parse("#42CC82")), 1.9);
     private static readonly Typeface TickTypeface = new("Inter");
+    private static readonly Typeface MonoTypeface = new("Cascadia Mono,Consolas,monospace");
 
     static WaveformScope()
         => AffectsRender<WaveformScope>(WaveformProperty);
@@ -46,10 +47,11 @@ public sealed class WaveformScope : Control
         if (!viewport.IsRenderable)
             return;
 
-        DrawHorizontalGrid(context, viewport);
+        DrawGrid(context, viewport);
         if (Waveform is not { } waveform)
         {
             DrawAxisBaseline(context, viewport);
+            DrawCenteredMessage(context, viewport, "Waiting for a coherent waveform window.");
             return;
         }
 
@@ -65,18 +67,19 @@ public sealed class WaveformScope : Control
             .Max();
         maximum = Math.Max(maximum, 1);
 
-        DrawSeries(context, waveform.PhaseA, 0, maximum, viewport, PhaseAPen);
-        DrawSeries(context, waveform.PhaseB, 1, maximum, viewport, PhaseBPen);
-        DrawSeries(context, waveform.PhaseC, 2, maximum, viewport, PhaseCPen);
-        DrawSeries(context, waveform.Residual, 3, maximum, viewport, ResidualPen);
+        DrawAmplitudeLabels(context, viewport, maximum);
+        DrawSeries(context, waveform.PhaseA, maximum, viewport, PhaseAPen);
+        DrawSeries(context, waveform.PhaseB, maximum, viewport, PhaseBPen);
+        DrawSeries(context, waveform.PhaseC, maximum, viewport, PhaseCPen);
+        DrawSeries(context, waveform.Residual, maximum, viewport, ResidualPen);
     }
 
-    private static void DrawHorizontalGrid(DrawingContext context, WaveformViewport viewport)
+    private static void DrawGrid(DrawingContext context, WaveformViewport viewport)
     {
         for (var row = 0; row <= 8; row++)
         {
             var y = viewport.Top + viewport.Height * row / 8d;
-            var pen = row % 2 == 1 ? ZeroLinePen : LaneBoundaryPen;
+            var pen = row == 4 ? ZeroLinePen : row % 2 == 0 ? MajorGridPen : MinorGridPen;
             context.DrawLine(pen, new Point(viewport.Left, y), new Point(viewport.Right, y));
         }
     }
@@ -130,10 +133,19 @@ public sealed class WaveformScope : Control
             new Point(viewport.Left, viewport.AxisY),
             new Point(viewport.Right, viewport.AxisY));
 
+    private static void DrawAmplitudeLabels(
+        DrawingContext context,
+        WaveformViewport viewport,
+        double maximum)
+    {
+        DrawEngineeringText(context, $"+{maximum:0.##} A", new Point(4, viewport.Top + 3));
+        DrawEngineeringText(context, "0", new Point(18, viewport.Top + viewport.Height / 2d - 6));
+        DrawEngineeringText(context, $"-{maximum:0.##} A", new Point(4, viewport.Bottom - 14));
+    }
+
     private static void DrawSeries(
         DrawingContext context,
         IReadOnlyList<double> samples,
-        int lane,
         double maximum,
         WaveformViewport viewport,
         Pen pen)
@@ -141,9 +153,8 @@ public sealed class WaveformScope : Control
         if (samples.Count < 2)
             return;
 
-        var laneHeight = viewport.Height / 4d;
-        var center = viewport.Top + laneHeight * (lane + 0.5);
-        var scale = laneHeight * 0.38 / maximum;
+        var center = viewport.Top + viewport.Height / 2d;
+        var scale = viewport.Height * 0.43 / maximum;
         var previous = new Point(viewport.Left, center - samples[0] * scale);
 
         for (var index = 1; index < samples.Count; index++)
@@ -154,5 +165,40 @@ public sealed class WaveformScope : Control
             context.DrawLine(pen, previous, current);
             previous = current;
         }
+    }
+
+    private static void DrawCenteredMessage(
+        DrawingContext context,
+        WaveformViewport viewport,
+        string message)
+    {
+        var formatted = new FormattedText(
+            message,
+            CultureInfo.InvariantCulture,
+            FlowDirection.LeftToRight,
+            TickTypeface,
+            11,
+            TickLabelBrush)
+        {
+            MaxTextWidth = viewport.Width * 0.8,
+            TextAlignment = TextAlignment.Center
+        };
+        context.DrawText(
+            formatted,
+            new Point(
+                viewport.Left + (viewport.Width - formatted.Width) / 2d,
+                viewport.Top + (viewport.Height - formatted.Height) / 2d));
+    }
+
+    private static void DrawEngineeringText(DrawingContext context, string text, Point point)
+    {
+        var formatted = new FormattedText(
+            text,
+            CultureInfo.InvariantCulture,
+            FlowDirection.LeftToRight,
+            MonoTypeface,
+            9,
+            StrongLabelBrush);
+        context.DrawText(formatted, point);
     }
 }

@@ -36,15 +36,19 @@ public sealed class EvidenceWorkspaceSourceTests
     }
 
     [TestMethod]
-    public void MainWindowMountsEvidenceBesideTheNativeFaceplate()
+    public void MainWindowMountsEvidenceInTheEngineeringToolsPaneBesideTheNativeOverview()
     {
+        var xaml = Read("src", "Arvrel.Desktop", "MainWindow.axaml");
         var source = Read("src", "Arvrel.Desktop", "MainWindow.axaml.cs");
 
-        StringAssert.Contains(source, "InstallVirtualRelayFaceplate()");
-        StringAssert.Contains(source, "InstallEvidenceWorkspace()");
-        StringAssert.Contains(source, "new EvidenceWorkspace");
-        StringAssert.Contains(source, "Header = \"EVIDENCE\"");
-        StringAssert.Contains(source, "ResolveRelayWorkspaceTabs()");
+        _ = XDocument.Parse(xaml, LoadOptions.PreserveWhitespace);
+
+        StringAssert.Contains(xaml, "Header=\"EVIDENCE\"");
+        StringAssert.Contains(xaml, "<controls:EvidenceWorkspace");
+        StringAssert.Contains(xaml, "<controls:VirtualRelayFaceplate");
+        StringAssert.Contains(xaml, "Engineering workspaces");
+        Assert.IsFalse(source.Contains("InstallEvidenceWorkspace", StringComparison.Ordinal));
+        Assert.IsFalse(source.Contains("ResolveRelayWorkspaceTabs", StringComparison.Ordinal));
     }
 
     private static string Read(params string[] segments)

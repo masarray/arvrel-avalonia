@@ -43,16 +43,20 @@ public sealed class ProcessBusWorkspaceSourceTests
     }
 
     [TestMethod]
-    public void MainWindow_MountsAndTicksProcessBusWorkspaceWithoutReplacingExistingSourceTabs()
+    public void MainWindow_MountsProcessBusWorkspaceInTheEngineeringToolsPaneAndTicksIt()
     {
+        var xaml = Read("src", "Arvrel.Desktop", "MainWindow.axaml");
         var source = Read("src", "Arvrel.Desktop", "MainWindow.axaml.cs");
 
-        StringAssert.Contains(source, "InstallProcessBusWorkspace()");
-        StringAssert.Contains(source, "new ProcessBusWorkspace");
-        StringAssert.Contains(source, "Header = \"PROCESS BUS\"");
-        StringAssert.Contains(source, "sourceTabs.Items.Insert");
+        _ = XDocument.Parse(xaml, LoadOptions.PreserveWhitespace);
+
+        StringAssert.Contains(xaml, "<SplitView");
+        StringAssert.Contains(xaml, "Header=\"PROCESS BUS\"");
+        StringAssert.Contains(xaml, "<controls:ProcessBusWorkspace");
+        StringAssert.Contains(xaml, "ItemsSource=\"{Binding ProcessBusAdapters}\"");
+        StringAssert.Contains(xaml, "ItemsSource=\"{Binding ProcessBusStreams}\"");
         StringAssert.Contains(source, "viewModel.TickProcessBus()");
-        StringAssert.Contains(source, "InstallVirtualRelayFaceplate()");
+        Assert.IsFalse(source.Contains("InstallProcessBusWorkspace", StringComparison.Ordinal));
     }
 
     [TestMethod]

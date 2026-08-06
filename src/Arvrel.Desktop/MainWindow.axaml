@@ -5,357 +5,818 @@
         x:Class="Arvrel.Desktop.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="ARVREL — Virtual Protection Relay Laboratory"
-        Width="1480"
+        Width="1520"
         Height="900"
-        MinWidth="1180"
-        MinHeight="720">
-  <Grid RowDefinitions="Auto,*">
+        MinWidth="1280"
+        MinHeight="760">
+  <Grid RowDefinitions="52,58,*,28">
     <Border Grid.Row="0"
-            Background="#0D171E"
-            BorderBrush="#223541"
-            BorderThickness="0,0,0,1"
-            Padding="18,12">
-      <Grid ColumnDefinitions="Auto,*,Auto">
-        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-          <Border Width="38" Height="38" CornerRadius="8" Background="#183C49" BorderBrush="#2D6F83" BorderThickness="1">
-            <TextBlock Text="AR" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#8ED5E8" />
+            Background="#17232D"
+            BorderBrush="#2D3C47"
+            BorderThickness="0,0,0,1">
+      <Grid Margin="16,0" ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="9"
+                    VerticalAlignment="Center">
+          <Border Width="29"
+                  Height="29"
+                  CornerRadius="5"
+                  Background="#2E6F9E">
+            <TextBlock Text="AR"
+                       Foreground="White"
+                       FontSize="11.5"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
           </Border>
           <StackPanel Spacing="1">
-            <TextBlock Classes="title" Text="{Binding ProductTitle}" />
-            <TextBlock Classes="caption" Text="{Binding ProductSubtitle}" />
+            <TextBlock Classes="title"
+                       Text="{Binding ProductTitle}" />
+            <TextBlock Classes="subtitle"
+                       Text="{Binding ProductSubtitle}" />
           </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Column="1" Margin="28,0" VerticalAlignment="Center" Spacing="2">
-          <TextBlock Classes="section" Text="{Binding ShellVersion}" />
-          <TextBlock Classes="caption" Text="{Binding PlatformText}" TextTrimming="CharacterEllipsis" />
-        </StackPanel>
-
-        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <Button Command="{Binding ResetRelayCommand}" Content="RESET RELAY" />
-          <Button Classes="primary" Command="{Binding RunCommand}" Content="{Binding RunButtonText}" MinWidth="138" />
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    VerticalAlignment="Center">
+          <Border Padding="9,5"
+                  CornerRadius="4"
+                  Background="#203440"
+                  BorderBrush="#355262"
+                  BorderThickness="1">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <Ellipse Width="8"
+                       Height="8"
+                       Fill="#47B46A"
+                       VerticalAlignment="Center" />
+              <TextBlock Text="{Binding LabStatusText}"
+                         Foreground="#C8D5DC"
+                         FontSize="10.2"
+                         VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <TextBlock Text="{Binding EngineStatusText}"
+                     Foreground="#758895"
+                     FontFamily="Cascadia Mono,Consolas,monospace"
+                     FontSize="9.6"
+                     VerticalAlignment="Center" />
         </StackPanel>
       </Grid>
     </Border>
 
-    <Grid Grid.Row="1" ColumnDefinitions="350,*,370" Margin="14">
-      <Border Grid.Column="0" Classes="card" Margin="0,0,10,0" Padding="10">
-        <TabControl>
-          <TabItem Header="SOURCE">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-              <StackPanel Spacing="10" Margin="4,10,4,4">
-                <Border Classes="subtle">
-                  <StackPanel Spacing="4">
-                    <TextBlock Classes="section" Text="VIRTUAL TEST SET" />
-                    <TextBlock FontWeight="Bold" Foreground="#8ED5E8" Text="{Binding ProfileNameText}" />
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Classes="caption" Text="{Binding OutputStateText}" />
-                      <TextBlock Grid.Column="1" Classes="caption" Text="{Binding InjectionFingerprintText}" />
-                    </Grid>
-                    <TextBlock Classes="caption" Text="{Binding ProvenanceText}" TextWrapping="Wrap" />
-                  </StackPanel>
-                </Border>
+    <Border Grid.Row="1"
+            Background="#F6F8F9"
+            BorderBrush="#C8D2D8"
+            BorderThickness="0,0,0,1">
+      <Grid Margin="13,8"
+            ColumnDefinitions="Auto,210,10,Auto,300,10,Auto,260,10,Auto,145,*,Auto">
+        <TextBlock Grid.Column="0"
+                   Classes="section"
+                   Text="SOURCE"
+                   VerticalAlignment="Center"
+                   Margin="0,0,7,0" />
+        <Border Grid.Column="1"
+                Classes="toolbarField">
+          <TextBlock Text="{Binding ActiveDisplaySourceText}"
+                     TextTrimming="CharacterEllipsis"
+                     VerticalAlignment="Center" />
+        </Border>
 
-                <StackPanel Spacing="5">
-                  <TextBlock Classes="section" Text="PRESET" />
-                  <ComboBox ItemsSource="{Binding PresetNames}"
-                            SelectedItem="{Binding SelectedPreset, Mode=TwoWay}"
-                            MinHeight="34" />
-                </StackPanel>
+        <TextBlock Grid.Column="3"
+                   Classes="section"
+                   Text="ADAPTER"
+                   VerticalAlignment="Center"
+                   Margin="0,0,7,0" />
+        <ComboBox Grid.Column="4"
+                  ItemsSource="{Binding ProcessBusAdapters}"
+                  SelectedItem="{Binding SelectedProcessBusAdapter, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding DisplayName}"
+                         TextTrimming="CharacterEllipsis" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
 
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                  <StackPanel Grid.Column="0" Spacing="5">
-                    <TextBlock Classes="section" Text="FREQUENCY" />
-                    <TextBox Text="{Binding FrequencyText, Mode=TwoWay}"
-                             HorizontalContentAlignment="Right"
-                             MinHeight="34" />
-                  </StackPanel>
-                  <TextBlock Grid.Column="1" Text="Hz" VerticalAlignment="Bottom" Margin="0,0,0,8" />
-                </Grid>
+        <TextBlock Grid.Column="6"
+                   Classes="section"
+                   Text="SV STREAM"
+                   VerticalAlignment="Center"
+                   Margin="0,0,7,0" />
+        <ComboBox Grid.Column="7"
+                  ItemsSource="{Binding ProcessBusStreams}"
+                  SelectedItem="{Binding SelectedProcessBusStream, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding DisplayName}"
+                         TextTrimming="CharacterEllipsis" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
 
-                <Button Classes="primary" Command="{Binding ApplyInjectionCommand}" Content="APPLY CONFIGURED SOURCE" />
-                <Button Classes="warning" Command="{Binding FaultCommand}" Content="{Binding FaultButtonText}" />
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                  <Button Grid.Column="0" Command="{Binding ClearInjectionCommand}" Content="CLEAR INJECTION" />
-                  <Button Grid.Column="1" Command="{Binding SmvCommand}" Content="{Binding SmvButtonText}" />
-                </Grid>
-                <Button Command="{Binding ResetLaboratoryCommand}" Content="RESET COMPLETE LAB" />
+        <TextBlock Grid.Column="9"
+                   Classes="section"
+                   Text="VIEW"
+                   VerticalAlignment="Center"
+                   Margin="0,0,7,0" />
+        <ComboBox Grid.Column="10"
+                  SelectedIndex="0">
+          <ComboBoxItem Content="Secondary A" />
+          <ComboBoxItem Content="Primary A" />
+        </ComboBox>
 
-                <Border Classes="subtle">
-                  <StackPanel Spacing="4">
-                    <TextBlock Classes="section" Text="SOURCE STATUS" />
-                    <TextBlock FontWeight="SemiBold" Text="{Binding InjectionEditorStatus}" TextWrapping="Wrap" />
-                    <TextBlock Classes="caption" Text="START/STOP retains configured values. Clear injection and relay reset are separate commands." TextWrapping="Wrap" />
-                  </StackPanel>
-                </Border>
+        <StackPanel Grid.Column="12"
+                    Orientation="Horizontal"
+                    Spacing="5">
+          <ToggleButton x:Name="ToolsToggle"
+                        Classes="tools"
+                        Content="TOOLS" />
+          <Button Classes="icon"
+                  Command="{Binding RefreshAdaptersCommand}"
+                  Content="↻" />
+          <Button Classes="icon"
+                  Command="{Binding SmvCommand}"
+                  Content="⚠" />
+          <Button Classes="icon"
+                  Command="{Binding ResetRelayCommand}"
+                  Content="↺" />
+          <Button Classes="primary"
+                  Command="{Binding RunCommand}"
+                  Content="{Binding RunButtonText}"
+                  MinWidth="132" />
+        </StackPanel>
+      </Grid>
+    </Border>
 
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <TextBlock Classes="section" Text="PROCESS-BUS CAPABILITY" />
-                    <TextBlock FontWeight="SemiBold" Text="LIVE CAPTURE" />
-                    <TextBlock Classes="caption" Text="{Binding LiveCaptureStatus}" TextWrapping="Wrap" />
-                    <Border Height="1" Background="#223541" />
-                    <TextBlock FontWeight="SemiBold" Text="CAPTURE REPLAY" />
-                    <TextBlock Classes="caption" Text="{Binding ReplayStatus}" TextWrapping="Wrap" />
-                  </StackPanel>
-                </Border>
+    <SplitView Grid.Row="2"
+               x:Name="WorkspaceSplit"
+               DisplayMode="Overlay"
+               PanePlacement="Left"
+               OpenPaneLength="430"
+               CompactPaneLength="0"
+               IsPaneOpen="{Binding IsChecked, ElementName=ToolsToggle, Mode=TwoWay}">
+      <SplitView.Pane>
+        <Border Background="#F7F9FA"
+                BorderBrush="#AEBCC4"
+                BorderThickness="0,0,1,0"
+                Padding="10">
+          <Grid RowDefinitions="Auto,*">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  Margin="2,0,2,8">
+              <StackPanel Spacing="2">
+                <TextBlock FontSize="13"
+                           FontWeight="SemiBold"
+                           Text="Engineering workspaces" />
+                <TextBlock Classes="caption"
+                           Text="Source, process bus, settings, evidence, and events" />
               </StackPanel>
-            </ScrollViewer>
-          </TabItem>
+              <ToggleButton Grid.Column="1"
+                            Classes="tools"
+                            IsChecked="{Binding IsChecked, ElementName=ToolsToggle, Mode=TwoWay}"
+                            Content="CLOSE" />
+            </Grid>
 
-          <TabItem Header="4I + 4V">
-            <Grid RowDefinitions="*,Auto" Margin="4,10,4,4">
-              <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                <StackPanel Spacing="7">
-                  <Grid ColumnDefinitions="30,54,*,*,68" ColumnSpacing="5" Margin="4,0">
-                    <TextBlock Grid.Column="0" Classes="caption" Text="ON" />
-                    <TextBlock Grid.Column="1" Classes="caption" Text="SIG" />
-                    <TextBlock Grid.Column="2" Classes="caption" Text="RMS" />
-                    <TextBlock Grid.Column="3" Classes="caption" Text="ANGLE°" />
-                    <TextBlock Grid.Column="4" Classes="caption" Text="SOURCE" />
-                  </Grid>
-                  <ItemsControl ItemsSource="{Binding InjectionChannels}">
+            <TabControl Grid.Row="1">
+              <TabItem Header="SOURCE">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                  <StackPanel Margin="4,8,4,4" Spacing="9">
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="4">
+                        <TextBlock Classes="section" Text="VIRTUAL TEST SET" />
+                        <TextBlock FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2E7FAF"
+                                   Text="{Binding ProfileNameText}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                          <TextBlock Classes="caption"
+                                     Text="{Binding OutputStateText}" />
+                          <TextBlock Grid.Column="1"
+                                     Classes="engineering"
+                                     Text="{Binding InjectionFingerprintText}" />
+                        </Grid>
+                        <TextBlock Classes="caption"
+                                   Text="{Binding ProvenanceText}"
+                                   TextWrapping="Wrap" />
+                      </StackPanel>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,120" ColumnSpacing="8">
+                      <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Classes="section" Text="PRESET" />
+                        <ComboBox ItemsSource="{Binding PresetNames}"
+                                  SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="1" Spacing="4">
+                        <TextBlock Classes="section" Text="FREQUENCY Hz" />
+                        <TextBox Text="{Binding FrequencyText, Mode=TwoWay}"
+                                 HorizontalContentAlignment="Right" />
+                      </StackPanel>
+                    </Grid>
+
+                    <Button Classes="primary"
+                            Command="{Binding ApplyInjectionCommand}"
+                            Content="APPLY CONFIGURED SOURCE" />
+                    <Button Classes="warning"
+                            Command="{Binding FaultCommand}"
+                            Content="{Binding FaultButtonText}" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="7">
+                      <Button Grid.Column="0"
+                              Command="{Binding ClearInjectionCommand}"
+                              Content="CLEAR INJECTION" />
+                      <Button Grid.Column="1"
+                              Command="{Binding SmvCommand}"
+                              Content="{Binding SmvButtonText}" />
+                    </Grid>
+                    <Button Command="{Binding ResetLaboratoryCommand}"
+                            Content="RESET COMPLETE LAB" />
+
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="3">
+                        <TextBlock Classes="section" Text="SOURCE STATUS" />
+                        <TextBlock FontWeight="SemiBold"
+                                   Text="{Binding InjectionEditorStatus}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Classes="caption"
+                                   Text="{Binding StatusText}"
+                                   TextWrapping="Wrap" />
+                      </StackPanel>
+                    </Border>
+
+                    <TextBlock Classes="section"
+                               Text="EDITABLE 4I + 4V"
+                               Margin="0,5,0,0" />
+                    <Grid ColumnDefinitions="30,50,*,*,66"
+                          ColumnSpacing="5"
+                          Margin="4,0">
+                      <TextBlock Grid.Column="0" Classes="caption" Text="ON" />
+                      <TextBlock Grid.Column="1" Classes="caption" Text="SIG" />
+                      <TextBlock Grid.Column="2" Classes="caption" Text="RMS" />
+                      <TextBlock Grid.Column="3" Classes="caption" Text="ANGLE°" />
+                      <TextBlock Grid.Column="4" Classes="caption" Text="SOURCE" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding InjectionChannels}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:InjectionChannelViewModel">
+                          <Border Classes="subtle"
+                                  Margin="0,0,0,5"
+                                  Padding="7">
+                            <Grid ColumnDefinitions="30,50,*,*,66"
+                                  ColumnSpacing="5">
+                              <CheckBox Grid.Column="0"
+                                        IsChecked="{Binding Enabled, Mode=TwoWay}"
+                                        VerticalAlignment="Center" />
+                              <StackPanel Grid.Column="1"
+                                          VerticalAlignment="Center">
+                                <TextBlock FontWeight="Bold"
+                                           Foreground="#2E7FAF"
+                                           Text="{Binding SignalLabel}" />
+                                <TextBlock Classes="caption"
+                                           Text="{Binding Unit}" />
+                              </StackPanel>
+                              <TextBox Grid.Column="2"
+                                       Text="{Binding RmsText, Mode=TwoWay}"
+                                       HorizontalContentAlignment="Right" />
+                              <TextBox Grid.Column="3"
+                                       Text="{Binding AngleText, Mode=TwoWay}"
+                                       HorizontalContentAlignment="Right" />
+                              <TextBlock Grid.Column="4"
+                                         Classes="caption"
+                                         Text="{Binding Provenance}"
+                                         TextWrapping="Wrap"
+                                         VerticalAlignment="Center" />
+                            </Grid>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </ScrollViewer>
+              </TabItem>
+
+              <TabItem Header="PROCESS BUS">
+                <controls:ProcessBusWorkspace Margin="4,8,4,4" />
+              </TabItem>
+
+              <TabItem Header="RELAY">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                  <StackPanel Margin="4,8,4,4" Spacing="9">
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="section"
+                                       Text="ACTIVE SETTING GROUP" />
+                            <TextBlock FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2E7FAF"
+                                       Text="{Binding SettingsGroupText}" />
+                          </StackPanel>
+                          <TextBlock Grid.Column="1"
+                                     Classes="engineering"
+                                     Text="{Binding SettingsFingerprintText}"
+                                     VerticalAlignment="Center" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,90" ColumnSpacing="8">
+                          <StackPanel Spacing="3">
+                            <TextBlock Classes="caption" Text="GROUP NAME" />
+                            <TextBox Text="{Binding SettingsEditor.GroupName, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="3">
+                            <TextBlock Classes="caption" Text="REVISION" />
+                            <TextBox Text="{Binding SettingsEditor.RevisionText, Mode=TwoWay}"
+                                     HorizontalContentAlignment="Right" />
+                          </StackPanel>
+                        </Grid>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                          <TextBlock FontWeight="Bold"
+                                     Foreground="#2E7FAF"
+                                     Text="50P" />
+                          <TextBlock Grid.Column="1"
+                                     Margin="8,0"
+                                     Classes="caption"
+                                     Text="PHASE INSTANTANEOUS" />
+                          <CheckBox Grid.Column="2"
+                                    Content="ENABLED"
+                                    IsChecked="{Binding SettingsEditor.Phase50.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="PICKUP A" />
+                            <TextBox Text="{Binding SettingsEditor.Phase50.PickupText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="DELAY ms" />
+                            <TextBox Text="{Binding SettingsEditor.Phase50.DelayMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="2" Spacing="2">
+                            <TextBlock Classes="caption" Text="DROPOUT" />
+                            <TextBox Text="{Binding SettingsEditor.Phase50.DropoutText, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                          <TextBlock FontWeight="Bold"
+                                     Foreground="#2E7FAF"
+                                     Text="51P" />
+                          <TextBlock Grid.Column="1"
+                                     Margin="8,0"
+                                     Classes="caption"
+                                     Text="PHASE TIME" />
+                          <CheckBox Grid.Column="2"
+                                    Content="ENABLED"
+                                    IsChecked="{Binding SettingsEditor.Phase51.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="PICKUP A" />
+                            <TextBox Text="{Binding SettingsEditor.Phase51.PickupText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="CURVE" />
+                            <ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}"
+                                      SelectedItem="{Binding SettingsEditor.Phase51.Curve, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="TMS" />
+                            <TextBox Text="{Binding SettingsEditor.Phase51.MultiplierText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="DEFINITE ms" />
+                            <TextBox Text="{Binding SettingsEditor.Phase51.DefiniteDelayMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="2" Spacing="2">
+                            <TextBlock Classes="caption" Text="MIN OP ms" />
+                            <TextBox Text="{Binding SettingsEditor.Phase51.MinimumOperateMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                          <TextBlock FontWeight="Bold"
+                                     Foreground="#2E7FAF"
+                                     Text="50N" />
+                          <TextBlock Grid.Column="1"
+                                     Margin="8,0"
+                                     Classes="caption"
+                                     Text="EARTH INSTANTANEOUS" />
+                          <CheckBox Grid.Column="2"
+                                    Content="ENABLED"
+                                    IsChecked="{Binding SettingsEditor.Earth50.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="PICKUP A" />
+                            <TextBox Text="{Binding SettingsEditor.Earth50.PickupText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="DELAY ms" />
+                            <TextBox Text="{Binding SettingsEditor.Earth50.DelayMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="2" Spacing="2">
+                            <TextBlock Classes="caption" Text="DROPOUT" />
+                            <TextBox Text="{Binding SettingsEditor.Earth50.DropoutText, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Classes="subtle">
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                          <TextBlock FontWeight="Bold"
+                                     Foreground="#2E7FAF"
+                                     Text="51N" />
+                          <TextBlock Grid.Column="1"
+                                     Margin="8,0"
+                                     Classes="caption"
+                                     Text="EARTH TIME" />
+                          <CheckBox Grid.Column="2"
+                                    Content="ENABLED"
+                                    IsChecked="{Binding SettingsEditor.Earth51.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="PICKUP A" />
+                            <TextBox Text="{Binding SettingsEditor.Earth51.PickupText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="CURVE" />
+                            <ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}"
+                                      SelectedItem="{Binding SettingsEditor.Earth51.Curve, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                          <StackPanel Spacing="2">
+                            <TextBlock Classes="caption" Text="TMS" />
+                            <TextBox Text="{Binding SettingsEditor.Earth51.MultiplierText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Classes="caption" Text="DEFINITE ms" />
+                            <TextBox Text="{Binding SettingsEditor.Earth51.DefiniteDelayMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                          <StackPanel Grid.Column="2" Spacing="2">
+                            <TextBlock Classes="caption" Text="MIN OP ms" />
+                            <TextBox Text="{Binding SettingsEditor.Earth51.MinimumOperateMsText, Mode=TwoWay}" />
+                          </StackPanel>
+                        </Grid>
+                      </StackPanel>
+                    </Border>
+
+                    <Button Classes="primary"
+                            Command="{Binding ApplySettingsCommand}"
+                            Content="VALIDATE + APPLY RELAY SETTINGS" />
+                    <TextBlock FontWeight="SemiBold"
+                               Text="{Binding SettingsEditorStatus}"
+                               TextWrapping="Wrap" />
+                    <TextBlock Classes="caption"
+                               Text="Applying relay settings resets timers and the trip latch while preserving the source."
+                               TextWrapping="Wrap" />
+                  </StackPanel>
+                </ScrollViewer>
+              </TabItem>
+
+              <TabItem Header="EVIDENCE">
+                <controls:EvidenceWorkspace Margin="4,8,4,4" />
+              </TabItem>
+
+              <TabItem Header="EVENTS">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              Margin="4,8,4,4">
+                  <ItemsControl ItemsSource="{Binding Events}">
                     <ItemsControl.ItemTemplate>
-                      <DataTemplate x:DataType="vm:InjectionChannelViewModel">
-                        <Border Classes="subtle" Margin="0,0,0,5" Padding="7">
-                          <Grid ColumnDefinitions="30,54,*,*,68" ColumnSpacing="5">
-                            <CheckBox Grid.Column="0" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" />
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                              <TextBlock FontWeight="Bold" Foreground="#8ED5E8" Text="{Binding SignalLabel}" />
-                              <TextBlock Classes="caption" Text="{Binding Unit}" />
-                            </StackPanel>
-                            <TextBox Grid.Column="2" Text="{Binding RmsText, Mode=TwoWay}" HorizontalContentAlignment="Right" />
-                            <TextBox Grid.Column="3" Text="{Binding AngleText, Mode=TwoWay}" HorizontalContentAlignment="Right" />
-                            <TextBlock Grid.Column="4" Classes="caption" Text="{Binding Provenance}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                          </Grid>
+                      <DataTemplate>
+                        <TextBlock FontFamily="Cascadia Mono,Consolas,monospace"
+                                   FontSize="10"
+                                   Foreground="#526973"
+                                   Text="{Binding}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,7" />
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </ScrollViewer>
+              </TabItem>
+            </TabControl>
+          </Grid>
+        </Border>
+      </SplitView.Pane>
+
+      <SplitView.Content>
+        <Grid Margin="11"
+              ColumnDefinitions="1.72*,9,0.92*">
+          <Grid Grid.Column="0"
+                RowDefinitions="*,9,190">
+            <Border Grid.Row="0"
+                    Classes="panel"
+                    Padding="0">
+              <Grid RowDefinitions="52,*,39">
+                <Border Grid.Row="0"
+                        BorderBrush="#D0D9DE"
+                        BorderThickness="0,0,0,1"
+                        Padding="13,0">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                      <StackPanel Orientation="Horizontal" Spacing="7">
+                        <TextBlock Text="SMV waveform"
+                                   FontSize="13.5"
+                                   FontWeight="SemiBold" />
+                        <Border Padding="6,2"
+                                CornerRadius="4"
+                                Background="#E8F3F9">
+                          <TextBlock Text="2 CYCLES"
+                                     Foreground="#2E7FAF"
+                                     FontSize="9.3"
+                                     FontWeight="SemiBold" />
+                        </Border>
+                        <TextBlock Text="{Binding StreamRunStateText}"
+                                   Foreground="#2B9B55"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                      </StackPanel>
+                      <TextBlock Classes="caption"
+                                 Text="{Binding ActiveDisplaySourceText}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="18"
+                                VerticalAlignment="Center">
+                      <StackPanel>
+                        <TextBlock Classes="section" Text="IA" />
+                        <TextBlock Classes="measurement" Text="{Binding PhaseAText}" />
+                      </StackPanel>
+                      <StackPanel>
+                        <TextBlock Classes="section" Text="IB" />
+                        <TextBlock Classes="measurement" Text="{Binding PhaseBText}" />
+                      </StackPanel>
+                      <StackPanel>
+                        <TextBlock Classes="section" Text="IC" />
+                        <TextBlock Classes="measurement" Text="{Binding PhaseCText}" />
+                      </StackPanel>
+                      <StackPanel>
+                        <TextBlock Classes="section" Text="3I0 / IN" />
+                        <TextBlock Classes="measurement" Text="{Binding ResidualText}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Grid>
+                </Border>
+
+                <TabControl Grid.Row="1"
+                            SelectedIndex="2"
+                            Margin="10,5,10,0">
+                  <TabItem Header="INJECT">
+                    <Grid ColumnDefinitions="*,Auto"
+                          Margin="4,8">
+                      <StackPanel VerticalAlignment="Center" Spacing="7">
+                        <TextBlock FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Text="{Binding ProfileNameText}" />
+                        <TextBlock Classes="caption"
+                                   Text="{Binding InjectionEditorStatus}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Classes="engineering"
+                                   Text="{Binding InjectionFingerprintText}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="1"
+                                  Orientation="Horizontal"
+                                  Spacing="7"
+                                  VerticalAlignment="Center">
+                        <Button Classes="warning"
+                                Command="{Binding FaultCommand}"
+                                Content="⚡ Inject A-G fault" />
+                        <Button Command="{Binding SmvCommand}"
+                                Content="🛡 Degrade SMV" />
+                        <Button Command="{Binding ResetLaboratoryCommand}"
+                                Content="↺ Reset" />
+                      </StackPanel>
+                    </Grid>
+                  </TabItem>
+
+                  <TabItem Header="WAVE">
+                    <Border Classes="darkPanel"
+                            Margin="4,8,4,4"
+                            Padding="5">
+                      <controls:WaveformScope Waveform="{Binding Waveform}"
+                                              MinHeight="330" />
+                    </Border>
+                  </TabItem>
+
+                  <TabItem Header="DUAL">
+                    <Grid ColumnDefinitions="2.25*,8,0.95*"
+                          Margin="4,8,4,4">
+                      <Border Grid.Column="0"
+                              Classes="darkPanel"
+                              Padding="5">
+                        <controls:WaveformScope Waveform="{Binding Waveform}"
+                                                MinHeight="330" />
+                      </Border>
+                      <Border Grid.Column="2"
+                              Classes="darkPanel">
+                        <controls:PhasorScope Frame="{Binding PhasorFrame}"
+                                              MinHeight="330" />
+                      </Border>
+                    </Grid>
+                  </TabItem>
+
+                  <TabItem Header="PHASOR">
+                    <Border Classes="darkPanel"
+                            Margin="4,8,4,4">
+                      <controls:PhasorScope Frame="{Binding PhasorFrame}"
+                                            MinHeight="330" />
+                    </Border>
+                  </TabItem>
+                </TabControl>
+
+                <Border Grid.Row="2"
+                        BorderBrush="#D0D9DE"
+                        BorderThickness="0,1,0,0"
+                        Padding="11,0">
+                  <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+                    <TextBlock Grid.Column="0"
+                               Classes="engineering"
+                               FontWeight="SemiBold"
+                               Text="{Binding FrequencyTextDisplay}"
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1"
+                               Classes="caption"
+                               Text="  ·  "
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2"
+                               Classes="caption"
+                               Text="{Binding WindowText}"
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="3"
+                               Classes="engineering"
+                               Text="{Binding SampleCounterText}"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center" />
+
+                    <StackPanel Grid.Column="5"
+                                Orientation="Horizontal"
+                                Spacing="5"
+                                VerticalAlignment="Center">
+                      <Button Classes="compact warning"
+                              Command="{Binding FaultCommand}"
+                              Content="⚡ Inject A-G fault" />
+                      <Button Classes="compact"
+                              Command="{Binding SmvCommand}"
+                              Content="🛡 Degrade SMV" />
+                      <Button Classes="compact"
+                              Command="{Binding ResetRelayCommand}"
+                              Content="↺ Reset" />
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Classes="panel"
+                    Padding="0">
+              <Grid RowDefinitions="42,*">
+                <Border Grid.Row="0"
+                        BorderBrush="#D0D9DE"
+                        BorderThickness="0,0,0,1"
+                        Padding="12,0">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="6"
+                                VerticalAlignment="Center">
+                      <TextBlock Text="Protection operation"
+                                 FontSize="12.5"
+                                 FontWeight="SemiBold" />
+                      <TextBlock Classes="caption"
+                                 Text="{Binding OperationHeaderText}"
+                                 VerticalAlignment="Center"
+                                 TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                    <Border Grid.Column="1"
+                            Padding="8,3"
+                            CornerRadius="4"
+                            Background="#EAF5EC"
+                            BorderBrush="#B9D8BF"
+                            BorderThickness="1"
+                            VerticalAlignment="Center">
+                      <TextBlock Text="{Binding LabStatusText}"
+                                 Foreground="#2B8C4B"
+                                 FontSize="9.2"
+                                 FontWeight="SemiBold" />
+                    </Border>
+                  </Grid>
+                </Border>
+
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="4*,1.35*"
+                      Margin="11,8">
+                  <ItemsControl Grid.Column="0"
+                                ItemsSource="{Binding ProtectionElements}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="vm:ProtectionElementViewModel">
+                        <Border Classes="subtle"
+                                Margin="0,0,8,0"
+                                Padding="8">
+                          <StackPanel Spacing="5">
+                            <Border Classes="toolbarField"
+                                    Padding="7,4">
+                              <TextBlock Classes="engineering"
+                                         FontWeight="SemiBold"
+                                         Text="{Binding Code}" />
+                            </Border>
+                            <TextBlock Foreground="#D64248"
+                                       FontWeight="SemiBold"
+                                       Text="{Binding StateText}" />
+                            <ProgressBar Minimum="0"
+                                         Maximum="1"
+                                         Value="{Binding Progress}" />
+                            <TextBlock Classes="caption"
+                                       Text="{Binding Detail}"
+                                       TextWrapping="Wrap"
+                                       MaxHeight="42" />
+                          </StackPanel>
                         </Border>
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
-                </StackPanel>
-              </ScrollViewer>
-              <StackPanel Grid.Row="1" Spacing="7" Margin="0,8,0,0">
-                <TextBlock Classes="caption" Text="Unchecked IN/VN are calculated from phase sums. The last valid configured source remains active while an edit is invalid." TextWrapping="Wrap" />
-                <Button Classes="primary" Command="{Binding ApplyInjectionCommand}" Content="VALIDATE + APPLY 4I/4V" />
-                <TextBlock FontWeight="SemiBold" Text="{Binding InjectionEditorStatus}" TextWrapping="Wrap" />
-              </StackPanel>
-            </Grid>
-          </TabItem>
-        </TabControl>
-      </Border>
 
-      <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Margin="0,0,10,0">
-        <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*" Margin="0,0,0,10">
-          <Border Grid.Column="0" Classes="card" Margin="0,0,5,0">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="caption" Text="PHASE A" />
-              <TextBlock Classes="measurement" Text="{Binding PhaseAText}" />
-            </StackPanel>
-          </Border>
-          <Border Grid.Column="1" Classes="card" Margin="5,0">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="caption" Text="PHASE B" />
-              <TextBlock Classes="measurement" Text="{Binding PhaseBText}" />
-            </StackPanel>
-          </Border>
-          <Border Grid.Column="2" Classes="card" Margin="5,0">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="caption" Text="PHASE C" />
-              <TextBlock Classes="measurement" Text="{Binding PhaseCText}" />
-            </StackPanel>
-          </Border>
-          <Border Grid.Column="3" Classes="card" Margin="5,0,0,0">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="caption" Text="RESIDUAL" />
-              <TextBlock Classes="measurement" Text="{Binding ResidualText}" />
-            </StackPanel>
-          </Border>
-        </Grid>
-
-        <Border Grid.Row="1" Classes="card">
-          <Grid RowDefinitions="Auto,*">
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
-              <StackPanel Spacing="2">
-                <TextBlock Classes="section" Text="TWO-CYCLE WAVEFORM EVIDENCE" />
-                <TextBlock Classes="caption" Text="Phase A · Phase B · Phase C · residual · quarter-cycle time ticks" />
-              </StackPanel>
-              <StackPanel Grid.Column="1" HorizontalAlignment="Right" Spacing="2">
-                <TextBlock HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding FrequencyTextDisplay}" />
-                <TextBlock Classes="caption" HorizontalAlignment="Right" Text="{Binding WindowText}" />
-              </StackPanel>
-            </Grid>
-            <Border Grid.Row="1" Background="#091116" BorderBrush="#21343E" BorderThickness="1" CornerRadius="6" Padding="4">
-              <controls:WaveformScope Waveform="{Binding Waveform}" MinHeight="350" />
+                  <Border Grid.Column="1"
+                          Classes="subtle"
+                          Padding="8">
+                    <Grid RowDefinitions="Auto,*">
+                      <TextBlock Grid.Row="0"
+                                 Classes="section"
+                                 Text="EVENT TRACE"
+                                 Margin="0,0,0,5" />
+                      <ItemsControl Grid.Row="1"
+                                    ItemsSource="{Binding Events}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock FontFamily="Cascadia Mono,Consolas,monospace"
+                                       FontSize="8.8"
+                                       Foreground="#526973"
+                                       Text="{Binding}"
+                                       TextTrimming="CharacterEllipsis"
+                                       Margin="0,0,0,3" />
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Grid>
+                  </Border>
+                </Grid>
+              </Grid>
             </Border>
           </Grid>
-        </Border>
 
-        <Border Grid.Row="2" Classes="card" Margin="0,10,0,0">
-          <Grid ColumnDefinitions="220,*">
-            <StackPanel Grid.Column="0" Spacing="3">
-              <TextBlock Classes="section" Text="RELAY STATE" />
-              <TextBlock FontSize="16" FontWeight="Bold" Foreground="#9AD8E8" Text="{Binding TripStateText}" TextWrapping="Wrap" />
-              <TextBlock Classes="caption" Text="{Binding SettingsGroupText}" />
-            </StackPanel>
-            <StackPanel Grid.Column="1" Margin="18,0,0,0" Spacing="3">
-              <TextBlock Classes="section" Text="STATUS" />
-              <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" />
-              <TextBlock Classes="caption" Text="{Binding TrustStateText}" TextWrapping="Wrap" />
-              <TextBlock Classes="caption" Text="{Binding DecisionReason}" TextWrapping="Wrap" />
-            </StackPanel>
-          </Grid>
-        </Border>
+          <Border Grid.Column="2"
+                  Background="#050708"
+                  BorderBrush="#0D1114"
+                  BorderThickness="1"
+                  CornerRadius="5"
+                  Padding="10">
+            <controls:VirtualRelayFaceplate />
+          </Border>
+        </Grid>
+      </SplitView.Content>
+    </SplitView>
+
+    <Border Grid.Row="3"
+            Background="#EEF3F5"
+            BorderBrush="#C7D1D7"
+            BorderThickness="0,1,0,0">
+      <Grid Margin="11,0" ColumnDefinitions="*,Auto">
+        <TextBlock Classes="caption"
+                   Text="{Binding StatusText}"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis" />
+        <TextBlock Grid.Column="1"
+                   Classes="engineering"
+                   Text="{Binding FooterStatusText}"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis" />
       </Grid>
-
-      <Border Grid.Column="2" Classes="card" Padding="10">
-        <TabControl>
-          <TabItem Header="RELAY">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-              <StackPanel Spacing="10" Margin="4,10,4,4">
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <StackPanel Grid.Column="0" Spacing="3">
-                        <TextBlock Classes="section" Text="ACTIVE SETTING GROUP" />
-                        <TextBlock FontWeight="Bold" Foreground="#8ED5E8" Text="{Binding SettingsGroupText}" />
-                      </StackPanel>
-                      <TextBlock Grid.Column="1" Classes="caption" Text="{Binding SettingsFingerprintText}" VerticalAlignment="Center" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,90" ColumnSpacing="8">
-                      <StackPanel Grid.Column="0" Spacing="3">
-                        <TextBlock Classes="caption" Text="GROUP NAME" />
-                        <TextBox Text="{Binding SettingsEditor.GroupName, Mode=TwoWay}" />
-                      </StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="3">
-                        <TextBlock Classes="caption" Text="REVISION" />
-                        <TextBox Text="{Binding SettingsEditor.RevisionText, Mode=TwoWay}" HorizontalContentAlignment="Right" />
-                      </StackPanel>
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                      <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="50P" />
-                      <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="PHASE INSTANTANEOUS" />
-                      <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Phase50.Enabled, Mode=TwoWay}" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Phase50.PickupText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Phase50.DelayMsText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Phase50.DropoutText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                      <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="51P" />
-                      <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="PHASE TIME" />
-                      <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Phase51.Enabled, Mode=TwoWay}" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Phase51.PickupText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="CURVE" /><ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}" SelectedItem="{Binding SettingsEditor.Phase51.Curve, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="TMS" /><TextBox Text="{Binding SettingsEditor.Phase51.MultiplierText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DEFINITE ms" /><TextBox Text="{Binding SettingsEditor.Phase51.DefiniteDelayMsText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="MIN OP ms" /><TextBox Text="{Binding SettingsEditor.Phase51.MinimumOperateMsText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Phase51.DropoutText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="RESET" /><ComboBox ItemsSource="{Binding SettingsEditor.ResetModes}" SelectedItem="{Binding SettingsEditor.Phase51.ResetMode, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="RESET ms" /><TextBox Text="{Binding SettingsEditor.Phase51.ResetDelayMsText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                      <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="50N" />
-                      <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="EARTH INSTANTANEOUS" />
-                      <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Earth50.Enabled, Mode=TwoWay}" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Earth50.PickupText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Earth50.DelayMsText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Earth50.DropoutText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="subtle">
-                  <StackPanel Spacing="7">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                      <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="51N" />
-                      <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="EARTH TIME" />
-                      <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Earth51.Enabled, Mode=TwoWay}" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Earth51.PickupText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="CURVE" /><ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}" SelectedItem="{Binding SettingsEditor.Earth51.Curve, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="TMS" /><TextBox Text="{Binding SettingsEditor.Earth51.MultiplierText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DEFINITE ms" /><TextBox Text="{Binding SettingsEditor.Earth51.DefiniteDelayMsText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="MIN OP ms" /><TextBox Text="{Binding SettingsEditor.Earth51.MinimumOperateMsText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
-                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Earth51.DropoutText, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="RESET" /><ComboBox ItemsSource="{Binding SettingsEditor.ResetModes}" SelectedItem="{Binding SettingsEditor.Earth51.ResetMode, Mode=TwoWay}" /></StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="RESET ms" /><TextBox Text="{Binding SettingsEditor.Earth51.ResetDelayMsText, Mode=TwoWay}" /></StackPanel>
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Button Classes="primary" Command="{Binding ApplySettingsCommand}" Content="VALIDATE + APPLY RELAY SETTINGS" />
-                <TextBlock FontWeight="SemiBold" Text="{Binding SettingsEditorStatus}" TextWrapping="Wrap" />
-                <TextBlock Classes="caption" Text="Applying relay settings resets relay timers/latch but preserves the separately configured source and its run state." TextWrapping="Wrap" />
-
-                <TextBlock Classes="section" Text="PROTECTION ELEMENTS" Margin="0,5,0,0" />
-                <ItemsControl ItemsSource="{Binding ProtectionElements}">
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ProtectionElementViewModel">
-                      <Border Classes="subtle" Margin="0,0,0,7">
-                        <StackPanel Spacing="6">
-                          <Grid ColumnDefinitions="Auto,*,Auto">
-                            <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="{Binding Code}" />
-                            <TextBlock Grid.Column="1" Margin="9,0" Classes="caption" Text="{Binding Label}" />
-                            <TextBlock Grid.Column="2" FontWeight="SemiBold" Text="{Binding StateText}" />
-                          </Grid>
-                          <ProgressBar Minimum="0" Maximum="1" Value="{Binding Progress}" />
-                          <TextBlock Classes="caption" Text="{Binding Detail}" TextWrapping="Wrap" />
-                        </StackPanel>
-                      </Border>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-              </StackPanel>
-            </ScrollViewer>
-          </TabItem>
-
-          <TabItem Header="EVENTS">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="4,10,4,4">
-              <ItemsControl ItemsSource="{Binding Events}">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock FontFamily="Cascadia Mono,Consolas,monospace"
-                               FontSize="11"
-                               Foreground="#9AB0BA"
-                               Text="{Binding}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,7" />
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
-            </ScrollViewer>
-          </TabItem>
-        </TabControl>
-      </Border>
-    </Grid>
+    </Border>
   </Grid>
 </Window>
