@@ -4,14 +4,14 @@
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>Arvrel.Desktop</AssemblyName>
     <RootNamespace>Arvrel.Desktop</RootNamespace>
-    <AssemblyTitle>ARVREL</AssemblyTitle>
-    <Product>ARVREL — Virtual Protection Relay Laboratory</Product>
+    <AssemblyTitle>ARVREL Avalonia</AssemblyTitle>
+    <Product>ARVREL Avalonia — Virtual Protection Relay Laboratory</Product>
     <Description>Cross-platform Avalonia desktop shell for the ARVREL virtual protection relay laboratory.</Description>
     <Authors>Ari Sulistiono</Authors>
     <Company>masarray</Company>
     <Copyright>Copyright (C) 2026 Ari Sulistiono</Copyright>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/masarray/arvrel</RepositoryUrl>
+    <RepositoryUrl>https://github.com/masarray/arvrel-avalonia</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon Condition="'$(OS)' == 'Windows_NT'">..\..\Asset\icon\favicon.ico</ApplicationIcon>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-arm64</RuntimeIdentifiers>
