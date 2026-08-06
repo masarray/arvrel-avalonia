@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Arvrel.Desktop.ViewModels"
+             x:Class="Arvrel.Desktop.Controls.EvidenceWorkspace"
+             x:DataType="vm:MainWindowViewModel">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="10" Margin="4,10,4,4">
+      <Border Classes="subtle">
+        <StackPanel Spacing="5">
+          <TextBlock Classes="section" Text="PORTABLE RELAY EVIDENCE" />
+          <TextBlock FontWeight="SemiBold"
+                     Foreground="#8ED5E8"
+                     Text="{Binding ActiveDisplaySourceText}" />
+          <TextBlock Classes="caption"
+                     Text="The export follows the source currently displayed by measurement, waveform, protection cards, annunciation, and faceplate."
+                     TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+
+      <Border Classes="subtle">
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="6">
+          <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="SETTINGS" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SettingsGroupText}" TextWrapping="Wrap" />
+
+          <TextBlock Grid.Row="1" Grid.Column="0" Classes="caption" Text="FINGERPRINT" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SettingsFingerprintText}" TextWrapping="Wrap" />
+
+          <TextBlock Grid.Row="2" Grid.Column="0" Classes="caption" Text="TRUST" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TrustStateText}" TextWrapping="Wrap" />
+
+          <TextBlock Grid.Row="3" Grid.Column="0" Classes="caption" Text="OPERATION" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding FaceplateDetailText}" TextWrapping="Wrap" />
+        </Grid>
+      </Border>
+
+      <Border Classes="subtle">
+        <StackPanel Spacing="5">
+          <TextBlock Classes="section" Text="DOCUMENT CONTENT" />
+          <TextBlock Classes="caption"
+                     Text="Source identity · source fingerprint · settings fingerprint · measurements · SMV trust · protection decision · phase/earth annunciation · pickup/trip record · recent operator events"
+                     TextWrapping="Wrap" />
+          <TextBlock Classes="caption"
+                     Text="The JSON envelope includes a SHA-256 digest over the canonical evidence payload."
+                     TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+
+      <Button Classes="primary"
+              Content="EXPORT ACTIVE SOURCE EVIDENCE"
+              Click="ExportEvidence_Click" />
+
+      <TextBlock FontWeight="SemiBold"
+                 Text="{Binding EvidenceExportStatus}"
+                 TextWrapping="Wrap" />
+      <TextBlock Classes="caption"
+                 Text="Evidence is an engineering laboratory record, not a certified relay test report or switching authority."
+                 TextWrapping="Wrap" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
