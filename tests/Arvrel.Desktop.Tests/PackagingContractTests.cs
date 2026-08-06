@@ -108,19 +108,30 @@ public sealed class PackagingContractTests
 
     private static string FindRepositoryRoot()
     {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current is not null)
+        var starts = new[]
         {
-            if (File.Exists(Path.Combine(current.FullName, "VERSION")) &&
-                Directory.Exists(Path.Combine(current.FullName, ".github")) &&
-                Directory.Exists(Path.Combine(current.FullName, "src")))
+            new DirectoryInfo(Environment.CurrentDirectory),
+            new DirectoryInfo(AppContext.BaseDirectory)
+        };
+
+        foreach (var start in starts)
+        {
+            for (var current = start; current is not null; current = current.Parent)
             {
-                return current.FullName;
+                if (IsStandaloneRepositoryRoot(current.FullName))
+                    return current.FullName;
             }
-            current = current.Parent;
         }
 
         throw new DirectoryNotFoundException(
-            $"Could not locate the ARVREL repository root above {AppContext.BaseDirectory}.");
+            $"Could not locate the ARVREL Avalonia repository root from " +
+            $"{Environment.CurrentDirectory} or {AppContext.BaseDirectory}.");
     }
+
+    private static bool IsStandaloneRepositoryRoot(string candidate)
+        => File.Exists(Path.Combine(candidate, "README.md")) &&
+           File.Exists(Path.Combine(candidate, "desktop", "ARVREL.Desktop.sln")) &&
+           Directory.Exists(Path.Combine(candidate, ".github", "workflows")) &&
+           Directory.Exists(Path.Combine(candidate, "packaging", "avalonia")) &&
+           Directory.Exists(Path.Combine(candidate, "src", "Arvrel.Desktop"));
 }
