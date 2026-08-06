@@ -49,6 +49,6 @@ public sealed class FaceplateOperationRecordTests
 
         Assert.IsFalse(viewModel.TripLatched);
         Assert.AreEqual(sequence, viewModel.CurrentOperationRecord?.Sequence);
-        Assert.IsTrue(viewModel.CurrentOperationRecord?.TripTimestamp.HasValue);
+        Assert.IsTrue(viewModel.CurrentOperationRecord?.TripTimestamp.HasValue == true);
     }
 }
