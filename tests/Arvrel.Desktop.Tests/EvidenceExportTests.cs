@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using Arvrel.Application.Evidence;
 using Arvrel.Desktop.ViewModels;
@@ -34,7 +35,9 @@ public sealed class EvidenceExportTests
         Assert.IsNotNull(evidence.Operation?.TripTimestamp);
         Assert.AreEqual(viewModel.SettingsGroupText.Split('·')[0].Trim(), evidence.Settings.GroupName);
         Assert.IsTrue(evidence.Events.Count > 0);
-        Assert.AreEqual(viewModel.PhaseAText, $"{evidence.Measurement.PhaseA:0.000} A");
+        Assert.AreEqual(
+            viewModel.PhaseAText,
+            string.Create(CultureInfo.InvariantCulture, $"{evidence.Measurement.PhaseA:0.000} A"));
     }
 
     [TestMethod]
@@ -49,7 +52,9 @@ public sealed class EvidenceExportTests
         Assert.AreEqual(
             RelayEvidenceSerializer.SchemaVersion,
             document.RootElement.GetProperty("schemaVersion").GetString());
-        Assert.AreEqual(64, document.RootElement.GetProperty("payloadSha256").GetString()?.Length);
+        Assert.AreEqual(
+            64,
+            document.RootElement.GetProperty("payloadSha256").GetString()?.Length ?? 0);
         StringAssert.Contains(viewModel.EvidenceExportStatus, "EXPORTED");
         StringAssert.Contains(viewModel.Events[0], "EVIDENCE");
     }
