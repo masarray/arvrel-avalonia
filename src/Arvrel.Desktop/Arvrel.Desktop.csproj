@@ -4,9 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>Arvrel.Desktop</AssemblyName>
     <RootNamespace>Arvrel.Desktop</RootNamespace>
-    <AssemblyTitle>ARVREL Avalonia</AssemblyTitle>
-    <Product>ARVREL Avalonia — Virtual Protection Relay Laboratory</Product>
-    <Description>Cross-platform Avalonia desktop shell for the ARVREL virtual protection relay laboratory.</Description>
+    <AssemblyTitle>ARVREL Avalonia Preview</AssemblyTitle>
+    <Product>ARVREL Avalonia — Cross-Platform Virtual Protection Relay Laboratory</Product>
+    <Description>Cross-platform Avalonia engineering preview for the ARVREL virtual protection relay laboratory.</Description>
     <Authors>Ari Sulistiono</Authors>
     <Company>masarray</Company>
     <Copyright>Copyright (C) 2026 Ari Sulistiono</Copyright>
