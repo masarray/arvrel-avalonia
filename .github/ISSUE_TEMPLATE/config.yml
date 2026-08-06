@@ -1,11 +1,14 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Stable Windows WPF product
+    url: https://github.com/masarray/arvrel/issues
+    about: Report issues specific to the released Windows WPF P6 edition in the stable product repository.
   - name: Security vulnerability
-    url: https://github.com/masarray/arvrel/security/advisories/new
+    url: https://github.com/masarray/arvrel-avalonia/security/advisories/new
     about: Report vulnerabilities privately. Do not publish sensitive details in an issue.
   - name: Commercial licensing and support
-    url: https://github.com/masarray/arvrel/blob/main/COMMERCIAL-LICENSING.md
-    about: Review the dual-licensing model and commercial contact route.
+    url: https://github.com/masarray/arvrel-avalonia/blob/main/COMMERCIAL-LICENSING.md
+    about: Review the licensing model and commercial contact route.
   - name: Support policy
-    url: https://github.com/masarray/arvrel/blob/main/SUPPORT.md
-    about: Understand community and contractual support boundaries.
+    url: https://github.com/masarray/arvrel-avalonia/blob/main/SUPPORT.md
+    about: Understand preview support and safety boundaries.
