@@ -4,9 +4,14 @@ namespace Arvrel.Desktop.ViewModels;
 
 public sealed partial class MainWindowViewModel
 {
+    private const string EvidenceProductVersion = "P5.10 · EVIDENCE EXPORT";
     private string _evidenceExportStatus = "READY · evidence follows the active display source";
 
     public string EvidenceExportStatus => _evidenceExportStatus;
+    public string EvidenceOperationSummary => FormatOperationDetail(CurrentOperationRecord);
+    public string EvidenceSourceFingerprintText => IsProcessBusDisplayActive
+        ? DisplayFingerprintText
+        : InjectionFingerprintText;
 
     public string SuggestedEvidenceFileName
     {
@@ -30,7 +35,7 @@ public sealed partial class MainWindowViewModel
         return new RelayEvidenceBundle(
             exportedAtUtc ?? DateTimeOffset.UtcNow,
             ProductTitle,
-            ShellVersion,
+            EvidenceProductVersion,
             PlatformText,
             CreateEvidenceSource(sampleCounter),
             new RelayEvidenceSettings(
@@ -75,6 +80,7 @@ public sealed partial class MainWindowViewModel
         _evidenceExportStatus = $"EXPORTED · {ActiveDisplaySourceText} · {evidence.ExportedAtUtc:yyyy-MM-dd HH:mm:ss} UTC";
         AddEvent("EVIDENCE", $"JSON exported · {ActiveDisplaySourceText} · {RelayEvidenceSerializer.ComputePayloadSha256(evidence)[..12]}");
         OnPropertyChanged(nameof(EvidenceExportStatus));
+        OnPropertyChanged(nameof(EvidenceOperationSummary));
         OnPropertyChanged(nameof(SuggestedEvidenceFileName));
     }
 
