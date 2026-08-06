@@ -15,18 +15,18 @@
 
     <Authors>Ari Sulistiono</Authors>
     <Company>masarray</Company>
-    <Product>ARVREL — Virtual Protection Relay Laboratory</Product>
-    <Description>Vendor-neutral IEC 61850 Sampled Values virtual protection relay laboratory for Windows.</Description>
+    <Product>ARVREL Avalonia — Virtual Protection Relay Laboratory</Product>
+    <Description>Cross-platform IEC 61850 Sampled Values virtual protection relay laboratory for Windows, Linux, and macOS.</Description>
     <Copyright>Copyright (C) 2026 Ari Sulistiono</Copyright>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/masarray/arvrel</RepositoryUrl>
+    <RepositoryUrl>https://github.com/masarray/arvrel-avalonia</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/masarray/arvrel</PackageProjectUrl>
-    <PackageTags>iec61850;sampled-values;smv;protection-relay;process-bus;power-systems</PackageTags>
+    <PackageProjectUrl>https://github.com/masarray/arvrel-avalonia</PackageProjectUrl>
+    <PackageTags>iec61850;sampled-values;smv;protection-relay;process-bus;power-systems;avalonia;cross-platform</PackageTags>
 
     <!-- Expected source-development layout:
          Git/ARIEC61850
-         Git/arvrel
+         Git/arvrel-avalonia
          Public release artifacts bundle the compiled sibling dependency.
     -->
     <ARIEC61850Root Condition="'$(ARIEC61850Root)' == ''">$(MSBuildThisFileDirectory)..\ARIEC61850</ARIEC61850Root>
