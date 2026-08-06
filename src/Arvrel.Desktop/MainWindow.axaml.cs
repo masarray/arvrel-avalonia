@@ -10,12 +10,14 @@ public sealed partial class MainWindow : Window
 {
     private readonly DispatcherTimer _timer;
     private VirtualRelayFaceplate? _virtualRelayFaceplate;
+    private EvidenceWorkspace? _evidenceWorkspace;
     private ProcessBusWorkspace? _processBusWorkspace;
 
     public MainWindow()
     {
         InitializeComponent();
         InstallVirtualRelayFaceplate();
+        InstallEvidenceWorkspace();
         InstallProcessBusWorkspace();
 
         _timer = new DispatcherTimer
@@ -35,6 +37,8 @@ public sealed partial class MainWindow : Window
         {
             if (_virtualRelayFaceplate is not null)
                 _virtualRelayFaceplate.DataContext = DataContext;
+            if (_evidenceWorkspace is not null)
+                _evidenceWorkspace.DataContext = DataContext;
             if (_processBusWorkspace is not null)
                 _processBusWorkspace.DataContext = DataContext;
         };
@@ -45,11 +49,7 @@ public sealed partial class MainWindow : Window
 
     private void InstallVirtualRelayFaceplate()
     {
-        var relayTabs = this.GetLogicalDescendants()
-            .OfType<TabControl>()
-            .LastOrDefault();
-        if (relayTabs is null)
-            throw new InvalidOperationException("Avalonia relay workspace TabControl was not found.");
+        var relayTabs = ResolveRelayWorkspaceTabs();
 
         _virtualRelayFaceplate = new VirtualRelayFaceplate
         {
@@ -64,6 +64,27 @@ public sealed partial class MainWindow : Window
         });
         relayTabs.SelectedIndex = 0;
     }
+
+    private void InstallEvidenceWorkspace()
+    {
+        var relayTabs = ResolveRelayWorkspaceTabs();
+        _evidenceWorkspace = new EvidenceWorkspace
+        {
+            DataContext = DataContext
+        };
+
+        relayTabs.Items.Insert(Math.Min(1, relayTabs.Items.Count), new TabItem
+        {
+            Header = "EVIDENCE",
+            Content = _evidenceWorkspace
+        });
+    }
+
+    private TabControl ResolveRelayWorkspaceTabs()
+        => this.GetLogicalDescendants()
+               .OfType<TabControl>()
+               .LastOrDefault()
+           ?? throw new InvalidOperationException("Avalonia relay workspace TabControl was not found.");
 
     private void InstallProcessBusWorkspace()
     {
