@@ -5,12 +5,25 @@
              Height="28"
              IsHitTestVisible="False">
   <Grid Width="28" Height="28">
+    <!-- A broad, low-opacity bloom replaces the previous hard white hotspot. -->
     <Ellipse x:Name="Halo"
              Width="28"
              Height="28"
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
-             Opacity="0" />
+             Opacity="0">
+      <Ellipse.Fill>
+        <RadialGradientBrush Center="50%,50%"
+                             GradientOrigin="50%,50%"
+                             RadiusX="50%"
+                             RadiusY="50%">
+          <GradientStop Color="#58FFFFFF" Offset="0" />
+          <GradientStop Color="#24FFFFFF" Offset="0.38" />
+          <GradientStop Color="#0CFFFFFF" Offset="0.66" />
+          <GradientStop Color="#00FFFFFF" Offset="1" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
 
     <Ellipse Width="24"
              Height="24"
@@ -38,8 +51,30 @@
              Width="17.5"
              Height="17.5"
              Fill="#34464F"
+             Stroke="#53636A"
+             StrokeThickness="0.65"
              HorizontalAlignment="Center"
              VerticalAlignment="Center" />
+
+    <!-- Curved lens shading is translucent and edge-weighted, not an opaque white stain. -->
+    <Ellipse x:Name="LensDepth"
+             Width="17.5"
+             Height="17.5"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
+      <Ellipse.Fill>
+        <RadialGradientBrush Center="52%,54%"
+                             GradientOrigin="34%,27%"
+                             RadiusX="78%"
+                             RadiusY="78%">
+          <GradientStop Color="#2EFFFFFF" Offset="0" />
+          <GradientStop Color="#10FFFFFF" Offset="0.34" />
+          <GradientStop Color="#0A000000" Offset="0.56" />
+          <GradientStop Color="#3A000000" Offset="0.82" />
+          <GradientStop Color="#74000000" Offset="1" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
 
     <Ellipse x:Name="InnerGlow"
              Width="13.5"
@@ -48,36 +83,47 @@
              VerticalAlignment="Center"
              Opacity="0" />
 
-    <Ellipse Width="17.5"
-             Height="17.5"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center">
-      <Ellipse.Fill>
-        <RadialGradientBrush Center="50%,50%"
-                             GradientOrigin="31%,25%"
-                             RadiusX="75%"
-                             RadiusY="75%">
-          <GradientStop Color="#7AFFFFFF" Offset="0" />
-          <GradientStop Color="#18FFFFFF" Offset="0.34" />
-          <GradientStop Color="#12000000" Offset="0.68" />
-          <GradientStop Color="#72000000" Offset="1" />
-        </RadialGradientBrush>
-      </Ellipse.Fill>
-    </Ellipse>
-
     <Ellipse x:Name="Core"
-             Width="7.5"
-             Height="7.5"
+             Width="6.5"
+             Height="6.5"
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
              Opacity="0" />
 
-    <Ellipse Width="5.2"
-             Height="3.2"
-             Fill="#F5FFFFFF"
-             Opacity="0.82"
+    <!-- Two broad translucent reflections preserve the glass curvature without a dirty dot. -->
+    <Ellipse x:Name="GlossSweep"
+             Width="13"
+             Height="7"
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
-             Margin="-5,-6,0,0" />
+             Margin="-2,-5,0,0"
+             Opacity="0.07">
+      <Ellipse.Fill>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+          <GradientStop Color="#34FFFFFF" Offset="0" />
+          <GradientStop Color="#14FFFFFF" Offset="0.46" />
+          <GradientStop Color="#00FFFFFF" Offset="1" />
+        </LinearGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
+
+    <Ellipse x:Name="GlossSoft"
+             Width="8.5"
+             Height="4.8"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Margin="-4,-6,0,0"
+             Opacity="0.11">
+      <Ellipse.Fill>
+        <RadialGradientBrush Center="50%,50%"
+                             GradientOrigin="44%,40%"
+                             RadiusX="58%"
+                             RadiusY="58%">
+          <GradientStop Color="#56FFFFFF" Offset="0" />
+          <GradientStop Color="#22FFFFFF" Offset="0.42" />
+          <GradientStop Color="#00FFFFFF" Offset="1" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
   </Grid>
 </UserControl>
