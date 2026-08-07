@@ -1,5 +1,6 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Arvrel.Application.Settings;
 using Arvrel.Desktop.ViewModels;
 
 namespace Arvrel.Desktop;
@@ -15,7 +16,8 @@ public sealed partial class App : Avalonia.Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel()
+                DataContext = new MainWindowViewModel(
+                    new ProtectionSettingGroupStore(filePath: null, restoreOnLoad: true))
             };
         }
 

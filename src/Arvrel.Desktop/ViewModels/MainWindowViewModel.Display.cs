@@ -205,6 +205,11 @@ public sealed partial class MainWindowViewModel
         ProtectionElements[1].Update(snapshot.Phase51);
         ProtectionElements[2].Update(snapshot.Earth50);
         ProtectionElements[3].Update(snapshot.Earth51);
+        ProtectionElements[4].Update(snapshot.Feeder.Undervoltage27);
+        ProtectionElements[5].Update(snapshot.Feeder.Overvoltage59);
+        ProtectionElements[6].Update(snapshot.Feeder.ResidualOvervoltage59N);
+        ProtectionElements[7].Update(snapshot.Feeder.DirectionalPhase67);
+        ProtectionElements[8].Update(snapshot.Feeder.DirectionalEarth67N);
     }
 
     private void SetDisplayHandoverStatus(string status)

@@ -11,6 +11,7 @@ public sealed partial class MainWindow : Window
     private readonly DispatcherTimer _timer;
     private VirtualRelayFaceplate? _virtualRelayFaceplate;
     private EvidenceWorkspace? _evidenceWorkspace;
+    private ProtectionSettingsWorkspace? _protectionSettingsWorkspace;
     private ProcessBusWorkspace? _processBusWorkspace;
 
     public MainWindow()
@@ -18,6 +19,7 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         InstallVirtualRelayFaceplate();
         InstallEvidenceWorkspace();
+        InstallProtectionSettingsWorkspace();
         InstallProcessBusWorkspace();
 
         _timer = new DispatcherTimer
@@ -39,6 +41,8 @@ public sealed partial class MainWindow : Window
                 _virtualRelayFaceplate.DataContext = DataContext;
             if (_evidenceWorkspace is not null)
                 _evidenceWorkspace.DataContext = DataContext;
+            if (_protectionSettingsWorkspace is not null)
+                _protectionSettingsWorkspace.DataContext = DataContext;
             if (_processBusWorkspace is not null)
                 _processBusWorkspace.DataContext = DataContext;
         };
@@ -77,6 +81,21 @@ public sealed partial class MainWindow : Window
         {
             Header = "EVIDENCE",
             Content = _evidenceWorkspace
+        });
+    }
+
+    private void InstallProtectionSettingsWorkspace()
+    {
+        var relayTabs = ResolveRelayWorkspaceTabs();
+        _protectionSettingsWorkspace = new ProtectionSettingsWorkspace
+        {
+            DataContext = DataContext
+        };
+
+        relayTabs.Items.Insert(Math.Min(2, relayTabs.Items.Count), new TabItem
+        {
+            Header = "SETTINGS",
+            Content = _protectionSettingsWorkspace
         });
     }
 

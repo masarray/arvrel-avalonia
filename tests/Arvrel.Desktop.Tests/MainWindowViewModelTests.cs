@@ -21,7 +21,10 @@ public sealed class MainWindowViewModelTests
         Assert.AreEqual(8, viewModel.InjectionChannels.Count);
         Assert.IsNotNull(viewModel.Waveform);
         Assert.AreEqual(160, viewModel.Waveform.PhaseA.Length);
-        Assert.AreEqual(4, viewModel.ProtectionElements.Count);
+        Assert.AreEqual(9, viewModel.ProtectionElements.Count);
+        CollectionAssert.AreEqual(
+            new[] { "50P", "51P", "50N", "51N", "27", "59", "59N", "67P", "67N" },
+            viewModel.ProtectionElements.Select(element => element.Code).ToArray());
         Assert.IsFalse(string.IsNullOrWhiteSpace(viewModel.LiveCaptureStatus));
         Assert.IsFalse(string.IsNullOrWhiteSpace(viewModel.ReplayStatus));
     }

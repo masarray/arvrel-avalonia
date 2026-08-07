@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Arvrel.Application.Laboratory;
+using Arvrel.Application.Settings;
 using Arvrel.Application.Workspace;
 using Arvrel.Desktop.Infrastructure;
 using Arvrel.ProcessBus;
@@ -32,7 +33,13 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged, IAsync
     private bool _settingsDraftDirty;
 
     public MainWindowViewModel()
+        : this(null)
     {
+    }
+
+    public MainWindowViewModel(ProtectionSettingGroupStore? settingGroupStore)
+    {
+        _settingGroupStore = settingGroupStore ?? new ProtectionSettingGroupStore();
         _settings = new ProtectionSettings();
         _workspace = new ArvrelWorkspace(_settings);
         _processBus = new SmvProcessBusController(_settings);
@@ -55,18 +62,19 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged, IAsync
             channel.PropertyChanged += InjectionChannel_PropertyChanged;
 
         SettingsEditor = new ProtectionSettingsEditorViewModel();
-        SettingsEditor.PropertyChanged += SettingsEditor_PropertyChanged;
-        SettingsEditor.Phase50.PropertyChanged += SettingsEditor_PropertyChanged;
-        SettingsEditor.Phase51.PropertyChanged += SettingsEditor_PropertyChanged;
-        SettingsEditor.Earth50.PropertyChanged += SettingsEditor_PropertyChanged;
-        SettingsEditor.Earth51.PropertyChanged += SettingsEditor_PropertyChanged;
+        SubscribeProtectionSettingsEditors();
 
         ProtectionElements = new ObservableCollection<ProtectionElementViewModel>
         {
             new("50P", "Phase instantaneous"),
             new("51P", "Phase inverse time"),
             new("50N", "Earth instantaneous"),
-            new("51N", "Earth inverse time")
+            new("51N", "Earth inverse time"),
+            new("27", "Undervoltage"),
+            new("59", "Overvoltage"),
+            new("59N", "Residual overvoltage"),
+            new("67P", "Directional phase overcurrent"),
+            new("67N", "Directional earth overcurrent")
         };
 
         Events = new ObservableCollection<string>();
@@ -74,6 +82,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged, IAsync
         SyncSettingsEditor();
         ApplyTick(_currentTick);
         AddEvent("READY", "Avalonia relay and injection workspace connected to portable core");
+        RestorePersistedSettingGroups();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -95,7 +104,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged, IAsync
 
     public string ProductTitle => "ARVREL";
     public string ProductSubtitle => "Virtual Protection Relay Laboratory";
-    public string ShellVersion => "P5.9 · GUARDED SOURCE HANDOVER";
+    public string ShellVersion => "P5.11 · FULL PROTECTION SETTINGS PARITY";
     public string PlatformText => $"{RuntimeInformation.OSDescription} · {RuntimeInformation.ProcessArchitecture}";
     public string SourceModeText => ActiveDisplaySourceText;
     public string StatusText => _statusText;
@@ -350,32 +359,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged, IAsync
     }
 
     public void ApplySettings()
-    {
-        if (!SettingsEditor.TryBuild(_settings, out var settings, out var error))
-        {
-            _settingsEditorStatus = $"INVALID · {error}";
-            _statusText = error;
-            AddEvent("SET INVALID", error);
-            OnPropertyChanged(string.Empty);
-            return;
-        }
-
-        var sourceFingerprint = _workspace.InternalLab.Scenario.InjectionFingerprint;
-        var wasRunning = IsRunning;
-        _workspace.InternalLab.ApplySettingsPreservingSource(settings);
-        _settings = settings;
-        SyncSettingsEditor();
-        _settingsDraftDirty = false;
-        OnPropertyChanged(nameof(SettingsDraftDirty));
-        _settingsEditorStatus = "APPLIED · relay timers and trip latch reset";
-        _statusText = $"Protection settings applied · {settings.GroupName} revision {settings.Revision}. Injection remains {(wasRunning ? "RUNNING" : "STOPPED")}.";
-        AddEvent("SETTINGS", $"{settings.GroupName} rev {settings.Revision} · {settings.Fingerprint()[..12]}");
-
-        if (!string.Equals(sourceFingerprint, _workspace.InternalLab.Scenario.InjectionFingerprint, StringComparison.Ordinal))
-            throw new InvalidOperationException("Applying relay settings unexpectedly changed the injection source.");
-
-        ApplyTick(_workspace.InternalLab.CaptureFrame());
-    }
+        => ApplySettingsFromEditor();
 
     public async ValueTask DisposeAsync()
     {

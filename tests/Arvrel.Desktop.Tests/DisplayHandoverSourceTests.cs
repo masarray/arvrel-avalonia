@@ -27,7 +27,7 @@ public sealed class DisplayHandoverSourceTests
         var source = Read("src", "Arvrel.Desktop", "ViewModels", "MainWindowViewModel.cs");
         var faceplate = Read("src", "Arvrel.Desktop", "ViewModels", "MainWindowViewModel.Faceplate.cs");
 
-        StringAssert.Contains(source, "P5.9 · GUARDED SOURCE HANDOVER");
+        StringAssert.Contains(source, "P5.11 · FULL PROTECTION SETTINGS PARITY");
         StringAssert.Contains(source, "SourceModeText => ActiveDisplaySourceText");
         StringAssert.Contains(source, "SmvDegraded => IsProcessBusDisplayActive");
         StringAssert.Contains(source, "!DisplayProtection.SmvTrust.AllowsTrip");
@@ -40,9 +40,10 @@ public sealed class DisplayHandoverSourceTests
         StringAssert.Contains(source, "if (!IsProcessBusDisplayActive)");
 
         StringAssert.Contains(faceplate, "PhaseAAnnunciation => DisplayAnnunciation.PhaseA");
-        StringAssert.Contains(faceplate, "Compact(DisplayActiveElement, 24)");
+        StringAssert.Contains(faceplate, "FormatOperationElement(CurrentOperationRecord)");
         StringAssert.Contains(faceplate, "DisplayFingerprintText");
         StringAssert.Contains(faceplate, "DisplayProvenanceText");
+        StringAssert.Contains(faceplate, "TripTimestamp.HasValue");
     }
 
     [TestMethod]

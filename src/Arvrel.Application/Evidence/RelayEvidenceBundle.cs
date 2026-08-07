@@ -26,7 +26,7 @@ public sealed record RelayEvidenceSource(
     string? StreamKey,
     string? StreamId,
     int? AppId,
-    int? SampleCounter);
+    long? SampleCounter);
 
 public sealed record RelayEvidenceSettings(
     string GroupName,
@@ -40,7 +40,7 @@ public sealed record RelayEvidenceMeasurement(
     double Residual,
     double FrequencyHz,
     int SamplesPerCycle,
-    int SampleCounter);
+    long SampleCounter);
 
 public sealed record RelayEvidenceTrust(
     bool AllowsMeasurement,
