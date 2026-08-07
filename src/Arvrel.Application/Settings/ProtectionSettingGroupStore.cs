@@ -28,13 +28,20 @@ public sealed class ProtectionSettingGroupStore
     };
 
     public ProtectionSettingGroupStore(string? filePath = null)
+        : this(filePath, restoreOnLoad: !string.IsNullOrWhiteSpace(filePath))
+    {
+    }
+
+    public ProtectionSettingGroupStore(string? filePath, bool restoreOnLoad)
     {
         FilePath = string.IsNullOrWhiteSpace(filePath)
             ? DefaultFilePath
             : Path.GetFullPath(filePath);
+        RestoreOnLoad = restoreOnLoad;
     }
 
     public string FilePath { get; }
+    public bool RestoreOnLoad { get; }
 
     public static string DefaultFilePath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -43,7 +50,9 @@ public sealed class ProtectionSettingGroupStore
 
     public ProtectionSettingGroupCatalog Load()
     {
-        if (!File.Exists(FilePath))
+        // Headless and unit-test callers use the parameterless ViewModel constructor.
+        // They may still save explicitly, but do not consume a developer's LocalAppData.
+        if (!RestoreOnLoad || !File.Exists(FilePath))
             return ProtectionSettingGroupCatalog.Empty;
 
         try
