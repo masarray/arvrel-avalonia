@@ -15,7 +15,11 @@ public sealed class VirtualRelayFaceplateSourceTests
         _ = XDocument.Parse(faceplate, LoadOptions.PreserveWhitespace);
         _ = XDocument.Parse(lamp, LoadOptions.PreserveWhitespace);
 
-        StringAssert.Contains(faceplate, "<Viewbox Stretch=\"Uniform\"");
+        Assert.IsFalse(faceplate.Contains("<Viewbox", StringComparison.Ordinal));
+        StringAssert.Contains(faceplate, "MinWidth=\"420\"");
+        StringAssert.Contains(faceplate, "MinHeight=\"620\"");
+        StringAssert.Contains(faceplate, "HorizontalAlignment=\"Stretch\"");
+        StringAssert.Contains(faceplate, "VerticalAlignment=\"Stretch\"");
         StringAssert.Contains(faceplate, "ARVREL");
         StringAssert.Contains(faceplate, "PROCESS BUS PROTECTION RELAY");
         StringAssert.Contains(faceplate, "BAY 12 · FEEDER");
@@ -35,16 +39,19 @@ public sealed class VirtualRelayFaceplateSourceTests
     }
 
     [TestMethod]
-    public void Lamp_UsesOneSharedBezelCavityLensAndPickupTripOptics()
+    public void Lamp_UsesOneSharedBezelCavityAndVividMultiLayerOptics()
     {
         var lamp = Read("src", "Arvrel.Desktop", "Controls", "RelayLamp.axaml");
         var behavior = Read("src", "Arvrel.Desktop", "Controls", "RelayLamp.axaml.cs");
 
         StringAssert.Contains(lamp, "x:Name=\"Halo\"");
         StringAssert.Contains(lamp, "x:Name=\"Lens\"");
-        StringAssert.Contains(lamp, "Width=\"22\"");
-        StringAssert.Contains(lamp, "Width=\"17\"");
-        StringAssert.Contains(lamp, "Width=\"12.5\"");
+        StringAssert.Contains(lamp, "x:Name=\"InnerGlow\"");
+        StringAssert.Contains(lamp, "x:Name=\"Core\"");
+        StringAssert.Contains(lamp, "Width=\"28\"");
+        StringAssert.Contains(lamp, "Width=\"24\"");
+        StringAssert.Contains(lamp, "Width=\"20\"");
+        StringAssert.Contains(lamp, "Width=\"17.5\"");
         StringAssert.Contains(lamp, "RadialGradientBrush");
 
         StringAssert.Contains(behavior, "StyledProperty<bool> IsOnProperty");
@@ -53,7 +60,10 @@ public sealed class VirtualRelayFaceplateSourceTests
         StringAssert.Contains(behavior, "RelayLampState.Pickup");
         StringAssert.Contains(behavior, "RelayLampState.Trip");
         StringAssert.Contains(behavior, "SetActive(ActiveColor)");
-        StringAssert.Contains(behavior, "Halo.Opacity = 0.72");
+        StringAssert.Contains(behavior, "InnerGlow.Opacity = 0.82");
+        StringAssert.Contains(behavior, "Core.Opacity = 1");
+        StringAssert.Contains(behavior, "Halo.Opacity = 0.95");
+        StringAssert.Contains(behavior, "BlendWithWhite(color, 0.72)");
         Assert.IsFalse(behavior.Contains("System.Windows", StringComparison.Ordinal));
     }
 
