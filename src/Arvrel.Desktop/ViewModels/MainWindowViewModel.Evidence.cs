@@ -29,7 +29,7 @@ public sealed partial class MainWindowViewModel
         var waveform = DisplayWaveform;
         var trust = measurement.SmvTrust;
         var sampleCounter = IsProcessBusDisplayActive
-            ? (int)_processBusSnapshot.SampleCounter
+            ? _processBusSnapshot.SampleCounter
             : _workspace.InternalLab.Scenario.SampleCounter;
 
         return new RelayEvidenceBundle(
@@ -91,7 +91,7 @@ public sealed partial class MainWindowViewModel
         OnPropertyChanged(nameof(EvidenceExportStatus));
     }
 
-    private RelayEvidenceSource CreateEvidenceSource(int sampleCounter)
+    private RelayEvidenceSource CreateEvidenceSource(long sampleCounter)
     {
         if (!IsProcessBusDisplayActive)
         {
