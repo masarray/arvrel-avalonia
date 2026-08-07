@@ -19,6 +19,32 @@ public sealed partial class MainWindowViewModel
             ? $"· PICKUP · {DisplayActiveElement}"
             : "· Measurements stable · no pickup";
 
+    public string OperationBadgeText => TripLatched
+        ? "TRIP LATCHED"
+        : PickupActive
+            ? "PICKUP ACTIVE"
+            : AllowsTrip
+                ? "TRIP PERMITTED"
+                : "TRIP BLOCKED";
+
+    public ProtectionElementViewModel PrimaryProtectionElement
+    {
+        get
+        {
+            var active = ProtectionElements.FirstOrDefault(element =>
+                !string.IsNullOrWhiteSpace(DisplayActiveElement) &&
+                DisplayActiveElement.StartsWith(element.Code, StringComparison.OrdinalIgnoreCase));
+            return active ?? ProtectionElements
+                .OrderByDescending(element => element.Progress)
+                .First();
+        }
+    }
+
+    public IReadOnlyList<ProtectionElementViewModel> SecondaryProtectionElements =>
+        ProtectionElements
+            .Where(element => !ReferenceEquals(element, PrimaryProtectionElement))
+            .ToArray();
+
     public string FooterStatusText =>
         $"{SettingsGroupText} · {ActiveDisplaySourceText} · VIRTUAL OUTPUT · NO GOOSE · NO PHYSICAL TRIP";
 
