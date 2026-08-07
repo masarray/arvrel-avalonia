@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Arvrel.Protection;
 
 public readonly record struct IecCurveParameters(double K, double Alpha, double C, string ShortName, string DisplayName);
@@ -66,6 +68,8 @@ public static class IecCurveCalculator
         if (family == IecCurveFamily.DefiniteTime)
             return "t = definite delay";
         var parameters = GetParameters(family, userK, userAlpha, userC);
-        return $"t = TMS × ({parameters.K:0.####} / (M^{parameters.Alpha:0.####} − 1) + {parameters.C:0.####})";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"t = TMS × ({parameters.K:0.####} / (M^{parameters.Alpha:0.####} − 1) + {parameters.C:0.####})");
     }
 }
