@@ -9,7 +9,7 @@
         Height="900"
         MinWidth="1280"
         MinHeight="760">
-  <Grid RowDefinitions="52,58,*,28">
+  <Grid RowDefinitions="52,60,*,28">
     <Border Grid.Row="0"
             Background="#17232D"
             BorderBrush="#2D3C47"
@@ -71,8 +71,8 @@
             Background="#F6F8F9"
             BorderBrush="#C8D2D8"
             BorderThickness="0,0,0,1">
-      <Grid Margin="13,8"
-            ColumnDefinitions="Auto,210,10,Auto,300,10,Auto,260,10,Auto,145,*,Auto">
+      <Grid Margin="13,9"
+            ColumnDefinitions="Auto,230,12,Auto,1.08*,12,Auto,1*,12,Auto,128,16,Auto">
         <TextBlock Grid.Column="0"
                    Classes="section"
                    Text="SOURCE"
@@ -91,6 +91,8 @@
                    VerticalAlignment="Center"
                    Margin="0,0,7,0" />
         <ComboBox Grid.Column="4"
+                  MinWidth="190"
+                  ToolTip.Tip="Select the capture adapter used by the process-bus workspace"
                   ItemsSource="{Binding ProcessBusAdapters}"
                   SelectedItem="{Binding SelectedProcessBusAdapter, Mode=TwoWay}">
           <ComboBox.ItemTemplate>
@@ -107,6 +109,8 @@
                    VerticalAlignment="Center"
                    Margin="0,0,7,0" />
         <ComboBox Grid.Column="7"
+                  MinWidth="190"
+                  ToolTip.Tip="Select the IEC 61850 Sampled Values stream presented to the operator"
                   ItemsSource="{Binding ProcessBusStreams}"
                   SelectedItem="{Binding SelectedProcessBusStream, Mode=TwoWay}">
           <ComboBox.ItemTemplate>
@@ -123,7 +127,8 @@
                    VerticalAlignment="Center"
                    Margin="0,0,7,0" />
         <ComboBox Grid.Column="10"
-                  SelectedIndex="0">
+                  SelectedIndex="0"
+                  ToolTip.Tip="Select secondary or primary engineering units">
           <ComboBoxItem Content="Secondary A" />
           <ComboBoxItem Content="Primary A" />
         </ComboBox>
@@ -133,16 +138,35 @@
                     Spacing="5">
           <ToggleButton x:Name="ToolsToggle"
                         Classes="tools"
-                        Content="TOOLS" />
+                        Content="TOOLS"
+                        ToolTip.Tip="Open engineering source, relay, process-bus, evidence, and event workspaces" />
           <Button Classes="icon"
                   Command="{Binding RefreshAdaptersCommand}"
-                  Content="↻" />
+                  ToolTip.Tip="Refresh capture adapters">
+            <Path Width="17"
+                  Height="17"
+                  Stretch="Uniform"
+                  Fill="#2E7FAF"
+                  Data="M17.65,6.35C16.2,4.9 14.21,4 12,4C7.58,4 4,7.58 4,12S7.58,20 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18C8.69,18 6,15.31 6,12S8.69,6 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+          </Button>
           <Button Classes="icon"
                   Command="{Binding SmvCommand}"
-                  Content="⚠" />
+                  ToolTip.Tip="Toggle SMV trust degradation">
+            <Path Width="17"
+                  Height="17"
+                  Stretch="Uniform"
+                  Fill="#C28416"
+                  Data="M1,21H23L12,2L1,21M13,18H11V16H13V18M13,14H11V10H13V14Z" />
+          </Button>
           <Button Classes="icon"
                   Command="{Binding ResetRelayCommand}"
-                  Content="↺" />
+                  ToolTip.Tip="Reset the displayed relay latch and timers">
+            <Path Width="17"
+                  Height="17"
+                  Stretch="Uniform"
+                  Fill="#2E7FAF"
+                  Data="M13,3C8.03,3 4,7.03 4,12H1L5,16L9,12H6C6,8.13 9.13,5 13,5S20,8.13 20,12S16.87,19 13,19C10.24,19 7.86,17.4 6.72,15.08L5.08,16.72C6.62,19.3 9.44,21 13,21C17.97,21 22,16.97 22,12S17.97,3 13,3Z" />
+          </Button>
           <Button Classes="primary"
                   Command="{Binding RunCommand}"
                   Content="{Binding RunButtonText}"
@@ -523,7 +547,7 @@
         <Grid Margin="11"
               ColumnDefinitions="1.72*,9,0.92*">
           <Grid Grid.Column="0"
-                RowDefinitions="*,9,190">
+                RowDefinitions="*,9,204">
             <Border Grid.Row="0"
                     Classes="panel"
                     Padding="0">
@@ -558,7 +582,7 @@
 
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
-                                Spacing="18"
+                                Spacing="20"
                                 VerticalAlignment="Center">
                       <StackPanel>
                         <TextBlock Classes="section" Text="IA" />
@@ -616,23 +640,23 @@
                             Margin="4,8,4,4"
                             Padding="5">
                       <controls:WaveformScope Waveform="{Binding Waveform}"
-                                              MinHeight="330" />
+                                              MinHeight="320" />
                     </Border>
                   </TabItem>
 
                   <TabItem Header="DUAL">
-                    <Grid ColumnDefinitions="2.25*,8,0.95*"
+                    <Grid ColumnDefinitions="2.02*,8,1*"
                           Margin="4,8,4,4">
                       <Border Grid.Column="0"
                               Classes="darkPanel"
                               Padding="5">
                         <controls:WaveformScope Waveform="{Binding Waveform}"
-                                                MinHeight="330" />
+                                                MinHeight="320" />
                       </Border>
                       <Border Grid.Column="2"
                               Classes="darkPanel">
                         <controls:PhasorScope Frame="{Binding PhasorFrame}"
-                                              MinHeight="330" />
+                                              MinHeight="320" />
                       </Border>
                     </Grid>
                   </TabItem>
@@ -641,7 +665,7 @@
                     <Border Classes="darkPanel"
                             Margin="4,8,4,4">
                       <controls:PhasorScope Frame="{Binding PhasorFrame}"
-                                            MinHeight="330" />
+                                            MinHeight="320" />
                     </Border>
                   </TabItem>
                 </TabControl>
@@ -710,14 +734,14 @@
                                  TextTrimming="CharacterEllipsis" />
                     </StackPanel>
                     <Border Grid.Column="1"
-                            Padding="8,3"
+                            Padding="9,4"
                             CornerRadius="4"
-                            Background="#EAF5EC"
-                            BorderBrush="#B9D8BF"
+                            Background="#EEF4F7"
+                            BorderBrush="#BCD0DA"
                             BorderThickness="1"
                             VerticalAlignment="Center">
-                      <TextBlock Text="{Binding LabStatusText}"
-                                 Foreground="#2B8C4B"
+                      <TextBlock Text="{Binding OperationBadgeText}"
+                                 Foreground="#365D70"
                                  FontSize="9.2"
                                  FontWeight="SemiBold" />
                     </Border>
@@ -725,64 +749,148 @@
                 </Border>
 
                 <Grid Grid.Row="1"
-                      ColumnDefinitions="4*,1.35*"
+                      ColumnDefinitions="1.28*,2.42*,1.55*"
+                      ColumnSpacing="8"
                       Margin="11,8">
-                  <ItemsControl Grid.Column="0"
-                                ItemsSource="{Binding ProtectionElements}">
+                  <Border Grid.Column="0"
+                          DataContext="{Binding PrimaryProtectionElement}"
+                          Background="#EEF5F8"
+                          BorderBrush="#8CB8CF"
+                          BorderThickness="1"
+                          CornerRadius="5"
+                          Padding="9">
+                    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="1">
+                          <TextBlock Text="PRIMARY OPERATION"
+                                     Foreground="#66818F"
+                                     FontSize="8.8"
+                                     FontWeight="Bold" />
+                          <TextBlock Text="{Binding Label}"
+                                     Foreground="#526C78"
+                                     FontSize="9.2"
+                                     TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Background="#D7EAF3"
+                                CornerRadius="4"
+                                Padding="7,4">
+                          <TextBlock Text="{Binding Code}"
+                                     Foreground="#1E6D96"
+                                     FontFamily="Cascadia Mono,Consolas,monospace"
+                                     FontSize="12"
+                                     FontWeight="Bold" />
+                        </Border>
+                      </Grid>
+                      <TextBlock Grid.Row="1"
+                                 Margin="0,8,0,0"
+                                 Text="{Binding StateText}"
+                                 Foreground="#D64248"
+                                 FontSize="13"
+                                 FontWeight="Bold" />
+                      <ProgressBar Grid.Row="2"
+                                   Margin="0,6,0,0"
+                                   Minimum="0"
+                                   Maximum="1"
+                                   Value="{Binding Progress}"
+                                   MinHeight="6" />
+                      <TextBlock Grid.Row="3"
+                                 Margin="0,7,0,0"
+                                 Classes="caption"
+                                 Text="{Binding Detail}"
+                                 TextWrapping="Wrap"
+                                 MaxHeight="50" />
+                      <TextBlock Grid.Row="4"
+                                 Margin="0,5,0,0"
+                                 Foreground="#66818F"
+                                 FontSize="8.5"
+                                 Text="Selected from active element and timing progress" />
+                    </Grid>
+                  </Border>
+
+                  <ItemsControl Grid.Column="1"
+                                ItemsSource="{Binding SecondaryProtectionElements}">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate>
-                        <UniformGrid Columns="4" />
+                        <UniformGrid Columns="3" />
                       </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                       <DataTemplate x:DataType="vm:ProtectionElementViewModel">
-                        <Border Classes="subtle"
+                        <Border Background="#F6F8F9"
+                                BorderBrush="#D6DEE2"
+                                BorderThickness="1"
+                                CornerRadius="5"
                                 Margin="0,0,8,0"
                                 Padding="8">
-                          <StackPanel Spacing="5">
-                            <Border Classes="toolbarField"
-                                    Padding="7,4">
-                              <TextBlock Classes="engineering"
-                                         FontWeight="SemiBold"
-                                         Text="{Binding Code}" />
-                            </Border>
-                            <TextBlock Foreground="#D64248"
+                          <Grid RowDefinitions="Auto,Auto,Auto,*">
+                            <Grid ColumnDefinitions="*,Auto">
+                              <TextBlock Text="{Binding Label}"
+                                         Foreground="#6B7F8A"
+                                         FontSize="8.8"
+                                         TextTrimming="CharacterEllipsis" />
+                              <TextBlock Grid.Column="1"
+                                         Text="{Binding Code}"
+                                         Foreground="#38505C"
+                                         FontFamily="Cascadia Mono,Consolas,monospace"
+                                         FontSize="10.5"
+                                         FontWeight="Bold" />
+                            </Grid>
+                            <TextBlock Grid.Row="1"
+                                       Margin="0,7,0,0"
+                                       Foreground="#C13B42"
+                                       FontSize="10.5"
                                        FontWeight="SemiBold"
                                        Text="{Binding StateText}" />
-                            <ProgressBar Minimum="0"
+                            <ProgressBar Grid.Row="2"
+                                         Margin="0,5,0,0"
+                                         Minimum="0"
                                          Maximum="1"
                                          Value="{Binding Progress}" />
-                            <TextBlock Classes="caption"
+                            <TextBlock Grid.Row="3"
+                                       Margin="0,6,0,0"
+                                       Classes="caption"
+                                       FontSize="8.8"
                                        Text="{Binding Detail}"
                                        TextWrapping="Wrap"
-                                       MaxHeight="42" />
-                          </StackPanel>
+                                       MaxHeight="58" />
+                          </Grid>
                         </Border>
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
 
-                  <Border Grid.Column="1"
-                          Classes="subtle"
-                          Padding="8">
+                  <Border Grid.Column="2"
+                          Background="#F7F9FA"
+                          BorderBrush="#D3DDE2"
+                          BorderThickness="1"
+                          CornerRadius="5"
+                          Padding="9">
                     <Grid RowDefinitions="Auto,*">
-                      <TextBlock Grid.Row="0"
-                                 Classes="section"
-                                 Text="EVENT TRACE"
-                                 Margin="0,0,0,5" />
-                      <ItemsControl Grid.Row="1"
-                                    ItemsSource="{Binding Events}">
-                        <ItemsControl.ItemTemplate>
-                          <DataTemplate>
-                            <TextBlock FontFamily="Cascadia Mono,Consolas,monospace"
-                                       FontSize="8.8"
-                                       Foreground="#526973"
-                                       Text="{Binding}"
-                                       TextTrimming="CharacterEllipsis"
-                                       Margin="0,0,0,3" />
-                          </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                      </ItemsControl>
+                      <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                        <TextBlock Classes="section"
+                                   Text="EVENT TRACE" />
+                        <TextBlock Grid.Column="1"
+                                   Text="LATEST FIRST"
+                                   Foreground="#8A9AA3"
+                                   FontSize="8.2" />
+                      </Grid>
+                      <ScrollViewer Grid.Row="1"
+                                    VerticalScrollBarVisibility="Auto"
+                                    HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding Events}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                              <TextBlock FontFamily="Cascadia Mono,Consolas,monospace"
+                                         FontSize="9"
+                                         Foreground="#526973"
+                                         Text="{Binding}"
+                                         TextWrapping="Wrap"
+                                         Margin="0,0,0,4" />
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </ScrollViewer>
                     </Grid>
                   </Border>
                 </Grid>
