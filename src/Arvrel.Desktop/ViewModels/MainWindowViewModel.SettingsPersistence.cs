@@ -101,16 +101,22 @@ public sealed partial class MainWindowViewModel
             return;
 
         var previousSelection = SelectedPersistedSettingGroup;
-        var hadPrevious = _persistedSettingGroups.TryGetValue(settings.GroupName, out var previousSettings);
+        var previousKey = _persistedSettingGroups.Keys.FirstOrDefault(key => string.Equals(
+            key,
+            settings.GroupName,
+            StringComparison.OrdinalIgnoreCase));
+        var previousSettings = previousKey is null ? null : _persistedSettingGroups[previousKey];
+
+        if (previousKey is not null)
+            _persistedSettingGroups.Remove(previousKey);
         _persistedSettingGroups[settings.GroupName] = settings;
         RefreshPersistedSettingGroupNames(settings.GroupName);
 
         if (!TryPersistSettingGroups(settings.GroupName))
         {
-            if (hadPrevious && previousSettings is not null)
-                _persistedSettingGroups[settings.GroupName] = previousSettings;
-            else
-                _persistedSettingGroups.Remove(settings.GroupName);
+            _persistedSettingGroups.Remove(settings.GroupName);
+            if (previousSettings is not null)
+                _persistedSettingGroups[previousSettings.GroupName] = previousSettings;
             RefreshPersistedSettingGroupNames(previousSelection);
             return;
         }
@@ -152,8 +158,8 @@ public sealed partial class MainWindowViewModel
         RefreshPersistedSettingGroupNames(PersistedSettingGroupNames.FirstOrDefault());
         if (!TryPersistSettingGroups(SelectedPersistedSettingGroup))
         {
-            _persistedSettingGroups[selected] = removed;
-            RefreshPersistedSettingGroupNames(selected);
+            _persistedSettingGroups[removed.GroupName] = removed;
+            RefreshPersistedSettingGroupNames(removed.GroupName);
             return;
         }
 
