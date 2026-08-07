@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Arvrel.Protection.Tests;
 
 [TestClass]
+[DoNotParallelize]
 public sealed class IecCurveFormulaCultureTests
 {
     [TestMethod]
