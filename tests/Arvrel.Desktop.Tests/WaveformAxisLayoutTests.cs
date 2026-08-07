@@ -49,15 +49,15 @@ public sealed class WaveformAxisLayoutTests
     }
 
     [TestMethod]
-    public void ViewportReservesAStableAxisBand()
+    public void ViewportReservesLegendAndStableAxisBands()
     {
         var viewport = WaveformAxisLayout.CreateViewport(600, 330);
 
         Assert.IsTrue(viewport.IsRenderable);
         Assert.AreEqual(10, viewport.Left, 1e-9);
-        Assert.AreEqual(6, viewport.Top, 1e-9);
+        Assert.AreEqual(26, viewport.Top, 1e-9);
         Assert.AreEqual(580, viewport.Width, 1e-9);
-        Assert.AreEqual(296, viewport.Height, 1e-9);
+        Assert.AreEqual(276, viewport.Height, 1e-9);
         Assert.AreEqual(302, viewport.AxisY, 1e-9);
         Assert.AreEqual(viewport.Bottom, viewport.AxisY, 1e-9);
     }
