@@ -627,9 +627,12 @@ public sealed class VoltageStageEditorViewModel : INotifyPropertyChanged
         if (EqualityComparer<T>.Default.Equals(field, value))
             return false;
         field = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        OnPropertyChanged(propertyName);
         return true;
     }
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
 public sealed class ResidualVoltageStageEditorViewModel : INotifyPropertyChanged
