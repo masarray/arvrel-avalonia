@@ -2,6 +2,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Arvrel.Desktop.App"
              RequestedThemeVariant="Light">
+  <Application.Resources>
+    <ControlTheme x:Key="RelayHardwareButtonTheme" TargetType="Button">
+      <Setter Property="MinWidth" Value="50" />
+      <Setter Property="MinHeight" Value="42" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Padding" Value="7,4" />
+      <Setter Property="Background" Value="#37434A" />
+      <Setter Property="Foreground" Value="#F7FAFB" />
+      <Setter Property="BorderBrush" Value="#8998A0" />
+      <Setter Property="BorderThickness" Value="1.2" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border x:Name="PART_RelayButtonBorder"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Padding="{TemplateBinding Padding}"
+                  BoxShadow="inset 0 1 0 0 #28FFFFFF, 0 1 2 0 #50000000">
+            <ContentPresenter x:Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Foreground="{TemplateBinding Foreground}"
+                              FontSize="{TemplateBinding FontSize}"
+                              FontWeight="{TemplateBinding FontWeight}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+
+      <Style Selector="^:pointerover">
+        <Setter Property="Background" Value="#4F5E66" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="BorderBrush" Value="#C1CDD2" />
+      </Style>
+      <Style Selector="^:pressed">
+        <Setter Property="Background" Value="#29343A" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="BorderBrush" Value="#6F8088" />
+        <Setter Property="Padding" Value="7,5,7,3" />
+      </Style>
+      <Style Selector="^:focus-visible">
+        <Setter Property="BorderBrush" Value="#45B6EA" />
+        <Setter Property="BorderThickness" Value="2" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.48" />
+      </Style>
+    </ControlTheme>
+  </Application.Resources>
+
   <Application.Styles>
     <FluentTheme />
 
@@ -57,6 +115,10 @@
     <Style Selector="Button:pointerover">
       <Setter Property="Background" Value="#DDE6EA" />
       <Setter Property="BorderBrush" Value="#9FB0B9" />
+    </Style>
+
+    <Style Selector="Button.hardware">
+      <Setter Property="Theme" Value="{StaticResource RelayHardwareButtonTheme}" />
     </Style>
 
     <Style Selector="Button.primary">
