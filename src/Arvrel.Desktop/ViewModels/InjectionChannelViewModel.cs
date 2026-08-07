@@ -31,6 +31,19 @@ public sealed class InjectionChannelViewModel : INotifyPropertyChanged
         _ => Signal.ToString()
     };
 
+    public string EngineeringSignalLabel => Signal switch
+    {
+        VirtualInjectionSignal.PhaseAVoltage => "V L1-E",
+        VirtualInjectionSignal.PhaseBVoltage => "V L2-E",
+        VirtualInjectionSignal.PhaseCVoltage => "V L3-E",
+        VirtualInjectionSignal.NeutralVoltage => "V RES / 3V0",
+        VirtualInjectionSignal.PhaseACurrent => "I L1",
+        VirtualInjectionSignal.PhaseBCurrent => "I L2",
+        VirtualInjectionSignal.PhaseCCurrent => "I L3",
+        VirtualInjectionSignal.NeutralCurrent => "I RES / 3I0",
+        _ => Signal.ToString()
+    };
+
     public string Unit => Signal is
         VirtualInjectionSignal.PhaseAVoltage or
         VirtualInjectionSignal.PhaseBVoltage or
@@ -38,6 +51,10 @@ public sealed class InjectionChannelViewModel : INotifyPropertyChanged
         VirtualInjectionSignal.NeutralVoltage
             ? "V"
             : "A";
+
+    public string ChannelFamily => Unit == "V"
+        ? "VOLTAGE CHANNEL"
+        : "CURRENT CHANNEL";
 
     public bool Enabled
     {
@@ -64,8 +81,8 @@ public sealed class InjectionChannelViewModel : INotifyPropertyChanged
 
     public string Provenance => Signal switch
     {
-        VirtualInjectionSignal.NeutralCurrent => Enabled ? "explicit IN" : "IA+IB+IC",
-        VirtualInjectionSignal.NeutralVoltage => Enabled ? "explicit VN" : "VA+VB+VC",
+        VirtualInjectionSignal.NeutralCurrent => Enabled ? "explicit IN" : "IA+IB+IC calculated",
+        VirtualInjectionSignal.NeutralVoltage => Enabled ? "explicit VN" : "VA+VB+VC calculated",
         _ => "explicit phase"
     };
 

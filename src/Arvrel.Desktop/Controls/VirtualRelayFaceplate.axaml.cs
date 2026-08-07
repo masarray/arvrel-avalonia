@@ -9,16 +9,18 @@ public sealed partial class VirtualRelayFaceplate : UserControl
 {
     private static readonly IBrush HardwareNormalBackground = new SolidColorBrush(Color.Parse("#37434A"));
     private static readonly IBrush HardwareNormalBorder = new SolidColorBrush(Color.Parse("#8998A0"));
-    private static readonly IBrush HardwareHoverBackground = new SolidColorBrush(Color.Parse("#4B5961"));
-    private static readonly IBrush HardwareHoverBorder = new SolidColorBrush(Color.Parse("#C1CDD2"));
-    private static readonly IBrush HardwareFocusBackground = new SolidColorBrush(Color.Parse("#3D4A51"));
+    private static readonly IBrush HardwareHoverBackground = new SolidColorBrush(Color.Parse("#586871"));
+    private static readonly IBrush HardwareHoverBorder = new SolidColorBrush(Color.Parse("#D6E0E4"));
+    private static readonly IBrush HardwareFocusBackground = new SolidColorBrush(Color.Parse("#46545C"));
     private static readonly IBrush HardwareFocusBorder = new SolidColorBrush(Color.Parse("#45B6EA"));
-    private static readonly IBrush HardwarePressedBackground = new SolidColorBrush(Color.Parse("#222C31"));
-    private static readonly IBrush HardwarePressedBorder = new SolidColorBrush(Color.Parse("#5D6C73"));
+    private static readonly IBrush HardwarePressedBackground = new SolidColorBrush(Color.Parse("#2B363C"));
+    private static readonly IBrush HardwarePressedBorder = new SolidColorBrush(Color.Parse("#708087"));
+    private static readonly IBrush HardwareTextForeground = new SolidColorBrush(Color.Parse("#F7FAFB"));
+    private static readonly IBrush HardwareAccentForeground = new SolidColorBrush(Color.Parse("#65C8F5"));
 
     private readonly HashSet<Button> _wiredHardwareButtons = new();
     private readonly HashSet<Button> _pressedHardwareButtons = new();
-    private readonly Dictionary<Button, IBrush?> _normalForegrounds = new();
+    private readonly Dictionary<Button, IBrush> _hardwareForegrounds = new();
 
     public VirtualRelayFaceplate()
     {
@@ -36,26 +38,25 @@ public sealed partial class VirtualRelayFaceplate : UserControl
             if (!_wiredHardwareButtons.Add(button))
                 continue;
 
-            _normalForegrounds[button] = button.Foreground;
+            _hardwareForegrounds[button] = IsAccentHardwareButton(button)
+                ? HardwareAccentForeground
+                : HardwareTextForeground;
 
             button.PointerEntered += (_, _) =>
             {
-                ApplyHardwareState(
-                    button,
-                    _pressedHardwareButtons.Contains(button)
-                        ? HardwareInteractionState.Pressed
-                        : HardwareInteractionState.Hover);
+                // A prior capture loss must never leave a hardware key visually stuck down.
+                _pressedHardwareButtons.Remove(button);
+                ApplyHardwareState(button, HardwareInteractionState.Hover);
             };
 
             button.PointerExited += (_, _) =>
             {
+                _pressedHardwareButtons.Remove(button);
                 ApplyHardwareState(
                     button,
-                    _pressedHardwareButtons.Contains(button)
-                        ? HardwareInteractionState.Pressed
-                        : button.IsFocused
-                            ? HardwareInteractionState.Focused
-                            : HardwareInteractionState.Normal);
+                    button.IsFocused
+                        ? HardwareInteractionState.Focused
+                        : HardwareInteractionState.Normal);
             };
 
             button.PointerPressed += (_, _) =>
@@ -65,6 +66,18 @@ public sealed partial class VirtualRelayFaceplate : UserControl
             };
 
             button.PointerReleased += (_, _) =>
+            {
+                _pressedHardwareButtons.Remove(button);
+                ApplyHardwareState(
+                    button,
+                    button.IsPointerOver
+                        ? HardwareInteractionState.Hover
+                        : button.IsFocused
+                            ? HardwareInteractionState.Focused
+                            : HardwareInteractionState.Normal);
+            };
+
+            button.PointerCaptureLost += (_, _) =>
             {
                 _pressedHardwareButtons.Remove(button);
                 ApplyHardwareState(
@@ -90,14 +103,12 @@ public sealed partial class VirtualRelayFaceplate : UserControl
 
             button.LostFocus += (_, _) =>
             {
-                if (!_pressedHardwareButtons.Contains(button))
-                {
-                    ApplyHardwareState(
-                        button,
-                        button.IsPointerOver
-                            ? HardwareInteractionState.Hover
-                            : HardwareInteractionState.Normal);
-                }
+                _pressedHardwareButtons.Remove(button);
+                ApplyHardwareState(
+                    button,
+                    button.IsPointerOver
+                        ? HardwareInteractionState.Hover
+                        : HardwareInteractionState.Normal);
             };
 
             ApplyHardwareState(button, HardwareInteractionState.Normal);
@@ -106,12 +117,15 @@ public sealed partial class VirtualRelayFaceplate : UserControl
 
     private void ApplyHardwareState(Button button, HardwareInteractionState state)
     {
-        var normalForeground = _normalForegrounds.TryGetValue(button, out var foreground)
-            ? foreground
-            : Brushes.White;
+        var foreground = _hardwareForegrounds.TryGetValue(button, out var configuredForeground)
+            ? configuredForeground
+            : HardwareTextForeground;
 
         button.Opacity = 1;
-        button.Foreground = normalForeground;
+        button.Foreground = foreground;
+        if (button.Content is TextBlock textBlock)
+            textBlock.Foreground = foreground;
+
         button.BorderThickness = state == HardwareInteractionState.Focused
             ? new Thickness(1.5)
             : new Thickness(1.2);
@@ -144,6 +158,9 @@ public sealed partial class VirtualRelayFaceplate : UserControl
                 break;
         }
     }
+
+    private static bool IsAccentHardwareButton(Button button)
+        => string.Equals(button.Content?.ToString(), "RESET", StringComparison.OrdinalIgnoreCase);
 
     private enum HardwareInteractionState
     {
