@@ -7,9 +7,9 @@ namespace Arvrel.Desktop.Controls;
 
 public sealed partial class RelayLamp : UserControl
 {
-    private static readonly Color OffColor = Color.Parse("#52636D");
-    private static readonly Color PickupColor = Color.Parse("#E1AA38");
-    private static readonly Color TripColor = Color.Parse("#E34D53");
+    private static readonly Color OffColor = Color.Parse("#34464F");
+    private static readonly Color PickupColor = Color.Parse("#FFC94F");
+    private static readonly Color TripColor = Color.Parse("#FF515C");
 
     public static readonly StyledProperty<bool> IsOnProperty =
         AvaloniaProperty.Register<RelayLamp, bool>(nameof(IsOn));
@@ -17,7 +17,7 @@ public sealed partial class RelayLamp : UserControl
     public static readonly StyledProperty<Color> ActiveColorProperty =
         AvaloniaProperty.Register<RelayLamp, Color>(
             nameof(ActiveColor),
-            Color.Parse("#45B768"));
+            Color.Parse("#54E882"));
 
     public static readonly StyledProperty<RelayLampState?> LampStateProperty =
         AvaloniaProperty.Register<RelayLamp, RelayLampState?>(nameof(LampState));
@@ -60,7 +60,7 @@ public sealed partial class RelayLamp : UserControl
 
     private void UpdateOptics()
     {
-        if (Lens is null || Halo is null)
+        if (Lens is null || InnerGlow is null || Core is null || Halo is null)
             return;
 
         if (LampState is { } state)
@@ -91,6 +91,10 @@ public sealed partial class RelayLamp : UserControl
     private void SetOff()
     {
         Lens.Fill = new SolidColorBrush(OffColor);
+        InnerGlow.Fill = Brushes.Transparent;
+        InnerGlow.Opacity = 0;
+        Core.Fill = Brushes.Transparent;
+        Core.Opacity = 0;
         Halo.Fill = Brushes.Transparent;
         Halo.Opacity = 0;
     }
@@ -98,7 +102,26 @@ public sealed partial class RelayLamp : UserControl
     private void SetActive(Color color)
     {
         Lens.Fill = new SolidColorBrush(color);
-        Halo.Fill = new SolidColorBrush(Color.FromArgb(120, color.R, color.G, color.B));
-        Halo.Opacity = 0.72;
+        InnerGlow.Fill = new SolidColorBrush(Color.FromArgb(230, color.R, color.G, color.B));
+        InnerGlow.Opacity = 0.82;
+        Core.Fill = new SolidColorBrush(BlendWithWhite(color, 0.72));
+        Core.Opacity = 1;
+        Halo.Fill = new SolidColorBrush(Color.FromArgb(155, color.R, color.G, color.B));
+        Halo.Opacity = 0.95;
+    }
+
+    private static Color BlendWithWhite(Color color, double amount)
+    {
+        static byte Blend(byte channel, double factor)
+            => (byte)Math.Clamp(
+                (int)Math.Round(channel + ((255 - channel) * factor)),
+                0,
+                255);
+
+        return Color.FromArgb(
+            255,
+            Blend(color.R, amount),
+            Blend(color.G, amount),
+            Blend(color.B, amount));
     }
 }
