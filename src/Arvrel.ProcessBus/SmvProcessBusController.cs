@@ -12,7 +12,7 @@ namespace Arvrel.ProcessBus;
 
 public sealed class SmvProcessBusController : IAsyncDisposable
 {
-    private readonly ProtectionSettings _settings;
+    private ProtectionSettings _settings;
     private readonly ILiveCaptureBackend _liveCaptureBackend;
     private readonly ICaptureReplaySource _replaySource;
     private readonly ConcurrentDictionary<string, SmvStreamRuntime> _streams = new(StringComparer.Ordinal);
@@ -41,7 +41,9 @@ public sealed class SmvProcessBusController : IAsyncDisposable
         ILiveCaptureBackend liveCaptureBackend,
         ICaptureReplaySource replaySource)
     {
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        ArgumentNullException.ThrowIfNull(settings);
+        settings.Validate();
+        _settings = settings;
         _liveCaptureBackend = liveCaptureBackend ?? throw new ArgumentNullException(nameof(liveCaptureBackend));
         _replaySource = replaySource ?? throw new ArgumentNullException(nameof(replaySource));
     }
@@ -105,6 +107,20 @@ public sealed class SmvProcessBusController : IAsyncDisposable
         foreach (var runtime in _streams.Values)
             runtime.SetMeasurementContext(context);
         Raise("CT", $"Measurement context set to {context.CtPrimaryA:0.###}/{context.CtSecondaryA:0.###} A at {context.NominalFrequencyHz:0.###} Hz.");
+    }
+
+    public void UpdateProtectionSettings(ProtectionSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        settings.Validate();
+        _settings = settings;
+
+        // A runtime owns timer, pickup, trip, and operation-record state for one SV
+        // stream. Rebuild runtimes rather than mutating those authorities in place.
+        // A running live source will create fresh runtimes on the next admitted frame;
+        // a completed replay must be replayed explicitly under the new setting group.
+        ClearStreams();
+        Raise("SETTINGS", $"Protection settings changed to {settings.GroupName} revision {settings.Revision}; SV runtimes will rebuild from fresh frames.");
     }
 
     public async Task StartLiveAsync(string adapterSelector, CancellationToken cancellationToken = default)
