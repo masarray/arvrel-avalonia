@@ -12,7 +12,7 @@ public static class WaveformAxisLayout
 {
     public const double PlotLeftInset = 10;
     public const double PlotRightInset = 10;
-    public const double PlotTopInset = 6;
+    public const double PlotTopInset = 26;
     public const double AxisBandHeight = 28;
 
     public static WaveformAxis Create(ScenarioWaveform waveform)
