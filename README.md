@@ -17,8 +17,8 @@ See [`MIGRATION_STATUS.md`](MIGRATION_STATUS.md) for the current boundary and pr
 ## Current snapshot
 
 - migration milestone: **P5.9**;
+- current visual-parity work: **P6 UX P0.1–P0.2** on `ux/p6-visual-parity-shell`;
 - imported source snapshot: `8ecec49933f7043c77a8f93b30d0cfe9803d5fff`;
-- current repository baseline: `main`;
 - Avalonia application: `src/Arvrel.Desktop`;
 - portable application layer: `src/Arvrel.Application`;
 - capture abstraction: `src/Arvrel.Capture`;
