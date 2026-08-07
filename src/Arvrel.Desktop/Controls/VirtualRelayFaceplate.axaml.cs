@@ -7,14 +7,14 @@ namespace Arvrel.Desktop.Controls;
 
 public sealed partial class VirtualRelayFaceplate : UserControl
 {
-    private static readonly IBrush HardwareNormalBackground = Brush.Parse("#37434A");
-    private static readonly IBrush HardwareNormalBorder = Brush.Parse("#8998A0");
-    private static readonly IBrush HardwareHoverBackground = Brush.Parse("#4B5961");
-    private static readonly IBrush HardwareHoverBorder = Brush.Parse("#C1CDD2");
-    private static readonly IBrush HardwareFocusBackground = Brush.Parse("#3D4A51");
-    private static readonly IBrush HardwareFocusBorder = Brush.Parse("#45B6EA");
-    private static readonly IBrush HardwarePressedBackground = Brush.Parse("#222C31");
-    private static readonly IBrush HardwarePressedBorder = Brush.Parse("#5D6C73");
+    private static readonly IBrush HardwareNormalBackground = new SolidColorBrush(Color.Parse("#37434A"));
+    private static readonly IBrush HardwareNormalBorder = new SolidColorBrush(Color.Parse("#8998A0"));
+    private static readonly IBrush HardwareHoverBackground = new SolidColorBrush(Color.Parse("#4B5961"));
+    private static readonly IBrush HardwareHoverBorder = new SolidColorBrush(Color.Parse("#C1CDD2"));
+    private static readonly IBrush HardwareFocusBackground = new SolidColorBrush(Color.Parse("#3D4A51"));
+    private static readonly IBrush HardwareFocusBorder = new SolidColorBrush(Color.Parse("#45B6EA"));
+    private static readonly IBrush HardwarePressedBackground = new SolidColorBrush(Color.Parse("#222C31"));
+    private static readonly IBrush HardwarePressedBorder = new SolidColorBrush(Color.Parse("#5D6C73"));
 
     private readonly HashSet<Button> _wiredHardwareButtons = new();
     private readonly HashSet<Button> _pressedHardwareButtons = new();
