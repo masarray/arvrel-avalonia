@@ -39,20 +39,24 @@ public sealed class VirtualRelayFaceplateSourceTests
     }
 
     [TestMethod]
-    public void Lamp_UsesOneSharedBezelCavityAndVividMultiLayerOptics()
+    public void Lamp_UsesCleanTranslucentMultiLayerOpticsWithoutHardWhiteStain()
     {
         var lamp = Read("src", "Arvrel.Desktop", "Controls", "RelayLamp.axaml");
         var behavior = Read("src", "Arvrel.Desktop", "Controls", "RelayLamp.axaml.cs");
 
         StringAssert.Contains(lamp, "x:Name=\"Halo\"");
         StringAssert.Contains(lamp, "x:Name=\"Lens\"");
+        StringAssert.Contains(lamp, "x:Name=\"LensDepth\"");
         StringAssert.Contains(lamp, "x:Name=\"InnerGlow\"");
         StringAssert.Contains(lamp, "x:Name=\"Core\"");
+        StringAssert.Contains(lamp, "x:Name=\"GlossSoft\"");
+        StringAssert.Contains(lamp, "x:Name=\"GlossSweep\"");
         StringAssert.Contains(lamp, "Width=\"28\"");
         StringAssert.Contains(lamp, "Width=\"24\"");
         StringAssert.Contains(lamp, "Width=\"20\"");
         StringAssert.Contains(lamp, "Width=\"17.5\"");
         StringAssert.Contains(lamp, "RadialGradientBrush");
+        Assert.IsFalse(lamp.Contains("Fill=\"#F5FFFFFF\"", StringComparison.Ordinal));
 
         StringAssert.Contains(behavior, "StyledProperty<bool> IsOnProperty");
         StringAssert.Contains(behavior, "StyledProperty<Color> ActiveColorProperty");
@@ -60,17 +64,22 @@ public sealed class VirtualRelayFaceplateSourceTests
         StringAssert.Contains(behavior, "RelayLampState.Pickup");
         StringAssert.Contains(behavior, "RelayLampState.Trip");
         StringAssert.Contains(behavior, "SetActive(ActiveColor)");
-        StringAssert.Contains(behavior, "InnerGlow.Opacity = 0.82");
-        StringAssert.Contains(behavior, "Core.Opacity = 1");
-        StringAssert.Contains(behavior, "Halo.Opacity = 0.95");
-        StringAssert.Contains(behavior, "BlendWithWhite(color, 0.72)");
+        StringAssert.Contains(behavior, "Lens.Fill = new SolidColorBrush(BlendWithBlack(color, 0.10))");
+        StringAssert.Contains(behavior, "InnerGlow.Opacity = 0.56");
+        StringAssert.Contains(behavior, "Core.Opacity = 0.84");
+        StringAssert.Contains(behavior, "Halo.Opacity = 0.48");
+        StringAssert.Contains(behavior, "GlossSoft.Opacity = 0.24");
+        StringAssert.Contains(behavior, "GlossSweep.Opacity = 0.13");
+        StringAssert.Contains(behavior, "BlendWithWhite(color, 0.46)");
+        StringAssert.Contains(behavior, "BlendWithBlack");
         Assert.IsFalse(behavior.Contains("System.Windows", StringComparison.Ordinal));
     }
 
     [TestMethod]
-    public void Faceplate_UsesExactPortableAnnunciationAndFunctionalOperatorKeys()
+    public void Faceplate_UsesExactPortableAnnunciationAndStableHardwareInteractionStates()
     {
         var faceplate = Read("src", "Arvrel.Desktop", "Controls", "VirtualRelayFaceplate.axaml");
+        var faceplateBehavior = Read("src", "Arvrel.Desktop", "Controls", "VirtualRelayFaceplate.axaml.cs");
         var viewModel = Read("src", "Arvrel.Desktop", "ViewModels", "MainWindowViewModel.Faceplate.cs");
 
         StringAssert.Contains(faceplate, "LampState=\"{Binding PhaseAAnnunciation}\"");
@@ -86,6 +95,21 @@ public sealed class VirtualRelayFaceplateSourceTests
         StringAssert.Contains(faceplate, "FaceplateOkCommand");
         StringAssert.Contains(faceplate, "Button.hardware:focus");
         StringAssert.Contains(faceplate, "FocusAdorner");
+
+        StringAssert.Contains(faceplateBehavior, "AttachedToVisualTree");
+        StringAssert.Contains(faceplateBehavior, "AttachHardwareButtonStates");
+        StringAssert.Contains(faceplateBehavior, "GetVisualDescendants");
+        StringAssert.Contains(faceplateBehavior, "candidate.Classes.Contains(\"hardware\")");
+        StringAssert.Contains(faceplateBehavior, "PointerEntered");
+        StringAssert.Contains(faceplateBehavior, "PointerExited");
+        StringAssert.Contains(faceplateBehavior, "PointerPressed");
+        StringAssert.Contains(faceplateBehavior, "PointerReleased");
+        StringAssert.Contains(faceplateBehavior, "GotFocus");
+        StringAssert.Contains(faceplateBehavior, "LostFocus");
+        StringAssert.Contains(faceplateBehavior, "HardwareHoverBackground");
+        StringAssert.Contains(faceplateBehavior, "HardwarePressedBackground");
+        StringAssert.Contains(faceplateBehavior, "button.Opacity = 1");
+        StringAssert.Contains(faceplateBehavior, "button.IsPointerOver");
 
         StringAssert.Contains(viewModel, "RelayAnnunciationLatch");
         StringAssert.Contains(viewModel, "UpdateFaceplateState(ProtectionSnapshot snapshot)");
