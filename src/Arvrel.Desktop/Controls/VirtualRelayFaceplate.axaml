@@ -4,203 +4,373 @@
              xmlns:vm="using:Arvrel.Desktop.ViewModels"
              x:Class="Arvrel.Desktop.Controls.VirtualRelayFaceplate"
              x:DataType="vm:MainWindowViewModel"
-             Background="Transparent">
+             Background="Transparent"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
   <UserControl.Styles>
     <Style Selector="Button.hardware">
-      <Setter Property="MinWidth" Value="46" />
-      <Setter Property="MinHeight" Value="38" />
-      <Setter Property="Margin" Value="3" />
-      <Setter Property="Padding" Value="6,3" />
-      <Setter Property="Background" Value="#303A41" />
-      <Setter Property="Foreground" Value="#EEF3F5" />
-      <Setter Property="BorderBrush" Value="#75838B" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="MinWidth" Value="50" />
+      <Setter Property="MinHeight" Value="42" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Padding" Value="7,4" />
+      <Setter Property="Background" Value="#37434A" />
+      <Setter Property="Foreground" Value="#F5F8F9" />
+      <Setter Property="BorderBrush" Value="#8998A0" />
+      <Setter Property="BorderThickness" Value="1.2" />
+      <Setter Property="CornerRadius" Value="7" />
       <Setter Property="FontSize" Value="11" />
       <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
       <Setter Property="FocusAdorner" Value="{x:Null}" />
     </Style>
     <Style Selector="Button.hardware:pointerover">
-      <Setter Property="Background" Value="#3A464D" />
-      <Setter Property="BorderBrush" Value="#82919A" />
+      <Setter Property="Background" Value="#46545C" />
+      <Setter Property="BorderBrush" Value="#A7B5BC" />
     </Style>
     <Style Selector="Button.hardware:focus">
-      <Setter Property="Background" Value="#303A41" />
-      <Setter Property="BorderBrush" Value="#75838B" />
+      <Setter Property="Background" Value="#3C4950" />
+      <Setter Property="BorderBrush" Value="#45B6EA" />
+      <Setter Property="BorderThickness" Value="1.5" />
     </Style>
     <Style Selector="Button.hardware:pressed">
-      <Setter Property="Background" Value="#273138" />
-      <Setter Property="Padding" Value="6,4,6,2" />
+      <Setter Property="Background" Value="#263139" />
+      <Setter Property="Padding" Value="7,5,7,3" />
+    </Style>
+    <Style Selector="Button.functionKey">
+      <Setter Property="MinWidth" Value="52" />
+      <Setter Property="MinHeight" Value="43" />
     </Style>
     <Style Selector="TextBlock.statusLabel">
-      <Setter Property="Foreground" Value="#E5ECEF" />
-      <Setter Property="FontSize" Value="9" />
+      <Setter Property="Foreground" Value="#F0F5F7" />
+      <Setter Property="FontSize" Value="10.5" />
       <Setter Property="FontWeight" Value="SemiBold" />
       <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
+    <Style Selector="TextBlock.lcdLabel">
+      <Setter Property="Foreground" Value="#60757A" />
+      <Setter Property="FontSize" Value="9.5" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="TextBlock.lcdValue">
+      <Setter Property="Foreground" Value="#233B42" />
+      <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
+      <Setter Property="FontSize" Value="10" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
   </UserControl.Styles>
 
-  <Viewbox Stretch="Uniform">
-    <Grid Width="520" Height="680" Margin="8">
-      <Border CornerRadius="24"
-              Background="#1A2227"
-              BorderBrush="#89969D"
-              BorderThickness="2" />
+  <Grid Margin="2"
+        MinWidth="420"
+        MinHeight="620">
+    <Border CornerRadius="25"
+            Background="#1A2328"
+            BorderBrush="#A0ADB3"
+            BorderThickness="2" />
 
-      <Border Margin="11"
-              CornerRadius="20"
-              Background="#0E1519"
-              BorderBrush="#4D5B63"
-              BorderThickness="1" />
+    <Border Margin="8"
+            CornerRadius="21"
+            Background="#0D1519"
+            BorderBrush="#526169"
+            BorderThickness="1.2" />
 
-      <Border Margin="19"
-              CornerRadius="15"
-              BorderBrush="#9AA7AE"
-              BorderThickness="1.3">
-        <Border.Background>
-          <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-            <GradientStop Color="#46535A" Offset="0" />
-            <GradientStop Color="#344047" Offset="0.38" />
-            <GradientStop Color="#283239" Offset="0.72" />
-            <GradientStop Color="#20292F" Offset="1" />
-          </LinearGradientBrush>
-        </Border.Background>
-        <Grid Margin="17" RowDefinitions="58,300,14,170,48">
-          <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-            <StackPanel VerticalAlignment="Center" Spacing="2">
-              <StackPanel Orientation="Horizontal" Spacing="6">
-                <TextBlock Text="ARVREL" Foreground="#EDF3F5" FontSize="18" FontWeight="SemiBold" />
-                <TextBlock Text="650" Foreground="#3CA0D8" FontSize="18" FontWeight="SemiBold" />
-              </StackPanel>
-              <TextBlock Text="PROCESS BUS PROTECTION RELAY" Foreground="#92A3AC" FontSize="8" />
+    <Border Margin="14"
+            CornerRadius="17"
+            BorderBrush="#A9B4B9"
+            BorderThickness="1.4">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+          <GradientStop Color="#4B5960" Offset="0" />
+          <GradientStop Color="#3A474E" Offset="0.34" />
+          <GradientStop Color="#2E3940" Offset="0.70" />
+          <GradientStop Color="#232D33" Offset="1" />
+        </LinearGradientBrush>
+      </Border.Background>
+
+      <Grid Margin="18"
+            RowDefinitions="64,*,12,190,46">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,Auto">
+          <StackPanel VerticalAlignment="Center"
+                      Spacing="3">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="7">
+              <TextBlock Text="ARVREL"
+                         Foreground="#F6F9FA"
+                         FontSize="21"
+                         FontWeight="SemiBold" />
+              <TextBlock Text="650"
+                         Foreground="#49B5EA"
+                         FontSize="21"
+                         FontWeight="SemiBold" />
             </StackPanel>
-            <Border Grid.Column="1" Padding="9,5" CornerRadius="5" Background="#202A30" BorderBrush="#69767E" BorderThickness="1" VerticalAlignment="Center">
-              <StackPanel>
-                <TextBlock Text="ARV-650" Foreground="#EDF3F5" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="10" FontWeight="SemiBold" />
-                <TextBlock Text="AVALONIA · IEC 61850" Foreground="#91A3AC" FontSize="7" />
-              </StackPanel>
-            </Border>
-          </Grid>
+            <TextBlock Text="PROCESS BUS PROTECTION RELAY"
+                       Foreground="#A7B6BD"
+                       FontSize="9.5"
+                       FontWeight="Medium" />
+          </StackPanel>
 
-          <Grid Grid.Row="1" ColumnDefinitions="105,10,238,10,82">
-            <Border Grid.Column="0" CornerRadius="9" Background="#273138" BorderBrush="#52616A" BorderThickness="1.2" Padding="9,7">
-              <Grid ColumnDefinitions="*,22" RowDefinitions="27,34,34,34,34,34,34,34,34">
-                <TextBlock Grid.ColumnSpan="2" Text="STATUS" Foreground="#96A7B0" FontSize="8.5" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <Border Grid.Column="1"
+                  Padding="10,6"
+                  CornerRadius="6"
+                  Background="#202B31"
+                  BorderBrush="#76858D"
+                  BorderThickness="1"
+                  VerticalAlignment="Center">
+            <StackPanel Spacing="1">
+              <TextBlock Text="ARV-650"
+                         Foreground="#F4F8F9"
+                         FontFamily="Cascadia Mono,Consolas,monospace"
+                         FontSize="11"
+                         FontWeight="SemiBold" />
+              <TextBlock Text="AVALONIA · IEC 61850"
+                         Foreground="#9BABB3"
+                         FontSize="8" />
+            </StackPanel>
+          </Border>
+        </Grid>
 
-                <TextBlock Grid.Row="1" Classes="statusLabel" Text="HEALTHY" />
-                <controls:RelayLamp Grid.Row="1" Grid.Column="1" IsOn="{Binding AllowsTrip}" ActiveColor="#45B768" />
+        <Grid Grid.Row="1"
+              ColumnDefinitions="118,10,*,10,92">
+          <Border Grid.Column="0"
+                  CornerRadius="10"
+                  Background="#263238"
+                  BorderBrush="#63727A"
+                  BorderThickness="1.2"
+                  Padding="10,8">
+            <Grid ColumnDefinitions="*,28"
+                  RowDefinitions="31,*,*,*,*,*,*,*,*">
+              <TextBlock Grid.ColumnSpan="2"
+                         Text="STATUS"
+                         Foreground="#B4C1C7"
+                         FontSize="9.5"
+                         FontWeight="SemiBold"
+                         VerticalAlignment="Center" />
 
-                <TextBlock Grid.Row="2" Classes="statusLabel" Text="PICKUP" />
-                <controls:RelayLamp Grid.Row="2" Grid.Column="1" IsOn="{Binding PickupActive}" ActiveColor="#E1AA38" />
+              <TextBlock Grid.Row="1" Classes="statusLabel" Text="HEALTHY" />
+              <controls:RelayLamp Grid.Row="1" Grid.Column="1" IsOn="{Binding AllowsTrip}" ActiveColor="#54E882" />
 
-                <TextBlock Grid.Row="3" Classes="statusLabel" Text="TRIP" />
-                <controls:RelayLamp Grid.Row="3" Grid.Column="1" IsOn="{Binding TripLatched}" ActiveColor="#E34D53" />
+              <TextBlock Grid.Row="2" Classes="statusLabel" Text="PICKUP" />
+              <controls:RelayLamp Grid.Row="2" Grid.Column="1" IsOn="{Binding PickupActive}" ActiveColor="#FFC94F" />
 
-                <TextBlock Grid.Row="4" Classes="statusLabel" Text="PHASE A" />
-                <controls:RelayLamp Grid.Row="4" Grid.Column="1" LampState="{Binding PhaseAAnnunciation}" />
+              <TextBlock Grid.Row="3" Classes="statusLabel" Text="TRIP" />
+              <controls:RelayLamp Grid.Row="3" Grid.Column="1" IsOn="{Binding TripLatched}" ActiveColor="#FF515C" />
 
-                <TextBlock Grid.Row="5" Classes="statusLabel" Text="PHASE B" />
-                <controls:RelayLamp Grid.Row="5" Grid.Column="1" LampState="{Binding PhaseBAnnunciation}" />
+              <TextBlock Grid.Row="4" Classes="statusLabel" Text="PHASE A" />
+              <controls:RelayLamp Grid.Row="4" Grid.Column="1" LampState="{Binding PhaseAAnnunciation}" />
 
-                <TextBlock Grid.Row="6" Classes="statusLabel" Text="PHASE C" />
-                <controls:RelayLamp Grid.Row="6" Grid.Column="1" LampState="{Binding PhaseCAnnunciation}" />
+              <TextBlock Grid.Row="5" Classes="statusLabel" Text="PHASE B" />
+              <controls:RelayLamp Grid.Row="5" Grid.Column="1" LampState="{Binding PhaseBAnnunciation}" />
 
-                <TextBlock Grid.Row="7" Classes="statusLabel" Text="EARTH" />
-                <controls:RelayLamp Grid.Row="7" Grid.Column="1" LampState="{Binding EarthAnnunciation}" />
+              <TextBlock Grid.Row="6" Classes="statusLabel" Text="PHASE C" />
+              <controls:RelayLamp Grid.Row="6" Grid.Column="1" LampState="{Binding PhaseCAnnunciation}" />
 
-                <TextBlock Grid.Row="8" Classes="statusLabel" Text="SMV BLOCK" FontSize="8" />
-                <controls:RelayLamp Grid.Row="8" Grid.Column="1" IsOn="{Binding SmvDegraded}" ActiveColor="#3CA0D8" />
-              </Grid>
-            </Border>
+              <TextBlock Grid.Row="7" Classes="statusLabel" Text="EARTH" />
+              <controls:RelayLamp Grid.Row="7" Grid.Column="1" LampState="{Binding EarthAnnunciation}" />
 
-            <Border Grid.Column="2" CornerRadius="8" Background="#0C1216" BorderBrush="#66747C" BorderThickness="1.2" Padding="6">
-              <Border CornerRadius="4" Background="#E6ECE7" BorderBrush="#101619" BorderThickness="1">
-                <Grid RowDefinitions="27,*,28">
-                  <Border Background="#4B7086" Padding="8,0">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="BAY 12 · FEEDER" Foreground="#F4F7F8" FontSize="8" FontWeight="SemiBold" VerticalAlignment="Center" />
-                      <TextBlock Grid.Column="1" Text="{Binding FaceplatePageName}" Foreground="#DDE8EC" FontSize="7" FontWeight="SemiBold" VerticalAlignment="Center" />
-                    </Grid>
-                  </Border>
-
-                  <StackPanel Grid.Row="1" Margin="11,9" Spacing="5">
-                    <TextBlock Text="{Binding TripStateText}" Foreground="#30444B" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="9.5" FontWeight="SemiBold" TextWrapping="Wrap" />
-                    <Grid ColumnDefinitions="42,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="4">
-                      <TextBlock Text="{Binding FaceplateRow1Label}" Foreground="#62777D" FontSize="8" />
-                      <TextBlock Grid.Column="1" Text="{Binding FaceplateRow1Value}" Foreground="#30444B" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="8" HorizontalAlignment="Right" MaxWidth="153" TextTrimming="CharacterEllipsis" />
-                      <TextBlock Grid.Row="1" Text="{Binding FaceplateRow2Label}" Foreground="#62777D" FontSize="8" />
-                      <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FaceplateRow2Value}" Foreground="#30444B" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="8" HorizontalAlignment="Right" MaxWidth="153" TextTrimming="CharacterEllipsis" />
-                      <TextBlock Grid.Row="2" Text="{Binding FaceplateRow3Label}" Foreground="#62777D" FontSize="8" />
-                      <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding FaceplateRow3Value}" Foreground="#30444B" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="8" HorizontalAlignment="Right" MaxWidth="153" TextTrimming="CharacterEllipsis" />
-                      <TextBlock Grid.Row="3" Text="{Binding FaceplateRow4Label}" Foreground="#62777D" FontSize="8" />
-                      <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding FaceplateRow4Value}" Foreground="#30444B" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="8" HorizontalAlignment="Right" MaxWidth="153" TextTrimming="CharacterEllipsis" />
-                    </Grid>
-                    <Border Height="1" Background="#94A49E" Margin="0,5" />
-                    <TextBlock Text="{Binding FaceplateNavigationText}" Foreground="#4B7086" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="7.5" FontWeight="SemiBold" TextWrapping="Wrap" />
-                    <TextBlock Text="{Binding FaceplateDetailText}" Foreground="#62777D" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="7.2" TextWrapping="Wrap" MaxHeight="52" />
-                  </StackPanel>
-
-                  <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*">
-                    <Border Grid.Column="0" Background="#CAD4D1" BorderBrush="#83938F" BorderThickness="0,1,1,0"><TextBlock Text="MEASURE" Foreground="#30444B" FontSize="6.7" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                    <Border Grid.Column="1" Background="#CAD4D1" BorderBrush="#83938F" BorderThickness="0,1,1,0"><TextBlock Text="EVENTS" Foreground="#30444B" FontSize="6.7" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                    <Border Grid.Column="2" Background="#CAD4D1" BorderBrush="#83938F" BorderThickness="0,1,1,0"><TextBlock Text="RECORDS" Foreground="#30444B" FontSize="6.7" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                    <Border Grid.Column="3" Background="#CAD4D1" BorderBrush="#83938F" BorderThickness="0,1,0,0"><TextBlock Text="SETUP" Foreground="#30444B" FontSize="6.7" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                  </Grid>
-                </Grid>
-              </Border>
-            </Border>
-
-            <Border Grid.Column="4" CornerRadius="9" Background="#273138" BorderBrush="#52616A" BorderThickness="1.2" Padding="8,9">
-              <StackPanel HorizontalAlignment="Center" Spacing="4">
-                <Button Classes="hardware" Command="{Binding FaceplateMeasureCommand}"><TextBlock Text="F1&#10;MEAS" TextAlignment="Center" FontSize="8" /></Button>
-                <Button Classes="hardware" Command="{Binding FaceplateEventsCommand}"><TextBlock Text="F2&#10;EVNT" TextAlignment="Center" FontSize="8" /></Button>
-                <Button Classes="hardware" Command="{Binding FaceplateRecordsCommand}"><TextBlock Text="F3&#10;RECD" TextAlignment="Center" FontSize="8" /></Button>
-                <Button Classes="hardware" Command="{Binding FaceplateSetupCommand}"><TextBlock Text="F4&#10;SET" TextAlignment="Center" FontSize="8" /></Button>
-                <Button Classes="hardware" Command="{Binding RunCommand}"><TextBlock Text="F5&#10;RUN" TextAlignment="Center" FontSize="8" /></Button>
-                <Button Classes="hardware" Content="RESET" Command="{Binding ResetRelayCommand}" Foreground="#4AB0E4" FontSize="9" />
-              </StackPanel>
-            </Border>
-          </Grid>
-
-          <Border Grid.Row="3" CornerRadius="11" Background="#273138" BorderBrush="#52616A" BorderThickness="1.2" Padding="12,10">
-            <Grid ColumnDefinitions="90,*,90">
-              <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
-                <Button Classes="hardware" Content="⌂" FontSize="17" Command="{Binding FaceplateHomeCommand}" />
-                <Button Classes="hardware" Content="☰" FontSize="16" Command="{Binding FaceplateMenuCommand}" />
-              </StackPanel>
-
-              <Border Grid.Column="1" Width="178" Height="144" CornerRadius="20" Background="#182126" BorderBrush="#3C8AB3" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Grid RowDefinitions="48,48,48" ColumnDefinitions="56,56,56" HorizontalAlignment="Center" VerticalAlignment="Center">
-                  <Button Grid.Row="0" Grid.Column="1" Classes="hardware" Content="▲" Command="{Binding FaceplatePreviousCommand}" />
-                  <Button Grid.Row="1" Grid.Column="0" Classes="hardware" Content="◀" Command="{Binding FaceplatePreviousCommand}" />
-                  <Button Grid.Row="1" Grid.Column="1" Classes="hardware" Content="OK" Command="{Binding FaceplateOkCommand}" />
-                  <Button Grid.Row="1" Grid.Column="2" Classes="hardware" Content="▶" Command="{Binding FaceplateNextCommand}" />
-                  <Button Grid.Row="2" Grid.Column="1" Classes="hardware" Content="▼" Command="{Binding FaceplateNextCommand}" />
-                </Grid>
-              </Border>
-
-              <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
-                <Button Classes="hardware" Content="↩" FontSize="16" Command="{Binding FaceplateBackCommand}" />
-                <Button Classes="hardware" Content="☆" FontSize="18" Command="{Binding FaceplateFavoriteCommand}" />
-                <Border Width="48" Height="28" CornerRadius="4" Background="#151D22" BorderBrush="#69767D" BorderThickness="1">
-                  <StackPanel VerticalAlignment="Center" Spacing="2">
-                    <Border Height="3" Width="31" CornerRadius="2" Background="#3CA0D8" />
-                    <TextBlock Text="USB" Foreground="#74858F" FontSize="7" HorizontalAlignment="Center" />
-                  </StackPanel>
-                </Border>
-              </StackPanel>
+              <TextBlock Grid.Row="8" Classes="statusLabel" Text="SMV BLOCK" FontSize="9.5" />
+              <controls:RelayLamp Grid.Row="8" Grid.Column="1" IsOn="{Binding SmvDegraded}" ActiveColor="#39B9FF" />
             </Grid>
           </Border>
 
-          <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Margin="2,7,2,0">
-            <StackPanel VerticalAlignment="Center" Spacing="2">
-              <TextBlock Text="VIRTUAL TRIP OUTPUT ONLY" Foreground="#91A3AC" FontSize="8" />
-              <TextBlock Text="{Binding SettingsGroupText}" Foreground="#758790" FontFamily="Cascadia Mono,Consolas,monospace" FontSize="7.5" />
+          <Border Grid.Column="2"
+                  CornerRadius="9"
+                  Background="#091115"
+                  BorderBrush="#78868D"
+                  BorderThickness="1.3"
+                  Padding="7">
+            <Border CornerRadius="5"
+                    Background="#E8EEE9"
+                    BorderBrush="#0B1215"
+                    BorderThickness="1.2">
+              <Grid RowDefinitions="32,*,31">
+                <Border Background="#456F86"
+                        Padding="10,0">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="BAY 12 · FEEDER"
+                               Foreground="#F7FAFB"
+                               FontSize="9.5"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding FaceplatePageName}"
+                               Foreground="#E4EEF2"
+                               FontSize="8.5"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                  </Grid>
+                </Border>
+
+                <Grid Grid.Row="1"
+                      Margin="13,11"
+                      RowDefinitions="Auto,Auto,1,Auto,*">
+                  <TextBlock Grid.Row="0"
+                             Text="{Binding TripStateText}"
+                             Foreground="#20383F"
+                             FontFamily="Cascadia Mono,Consolas,monospace"
+                             FontSize="11.5"
+                             FontWeight="Bold"
+                             TextWrapping="Wrap"
+                             Margin="0,0,0,9" />
+
+                  <Grid Grid.Row="1"
+                        ColumnDefinitions="52,*"
+                        RowDefinitions="Auto,Auto,Auto,Auto"
+                        ColumnSpacing="9"
+                        RowSpacing="5">
+                    <TextBlock Classes="lcdLabel" Text="{Binding FaceplateRow1Label}" />
+                    <TextBlock Grid.Column="1" Classes="lcdValue" Text="{Binding FaceplateRow1Value}" />
+                    <TextBlock Grid.Row="1" Classes="lcdLabel" Text="{Binding FaceplateRow2Label}" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Classes="lcdValue" Text="{Binding FaceplateRow2Value}" />
+                    <TextBlock Grid.Row="2" Classes="lcdLabel" Text="{Binding FaceplateRow3Label}" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Classes="lcdValue" Text="{Binding FaceplateRow3Value}" />
+                    <TextBlock Grid.Row="3" Classes="lcdLabel" Text="{Binding FaceplateRow4Label}" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Classes="lcdValue" Text="{Binding FaceplateRow4Value}" />
+                  </Grid>
+
+                  <Border Grid.Row="2"
+                          Height="1"
+                          Background="#93A49F"
+                          Margin="0,10" />
+
+                  <TextBlock Grid.Row="3"
+                             Text="{Binding FaceplateNavigationText}"
+                             Foreground="#416C82"
+                             FontFamily="Cascadia Mono,Consolas,monospace"
+                             FontSize="9"
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,0,0,6" />
+
+                  <TextBlock Grid.Row="4"
+                             Text="{Binding FaceplateDetailText}"
+                             Foreground="#536B71"
+                             FontFamily="Cascadia Mono,Consolas,monospace"
+                             FontSize="8.7"
+                             TextWrapping="Wrap"
+                             MaxHeight="68" />
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      ColumnDefinitions="*,*,*,*">
+                  <Border Grid.Column="0" Background="#CFD9D5" BorderBrush="#849590" BorderThickness="0,1,1,0">
+                    <TextBlock Text="MEASURE" Foreground="#294149" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <Border Grid.Column="1" Background="#CFD9D5" BorderBrush="#849590" BorderThickness="0,1,1,0">
+                    <TextBlock Text="EVENTS" Foreground="#294149" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <Border Grid.Column="2" Background="#CFD9D5" BorderBrush="#849590" BorderThickness="0,1,1,0">
+                    <TextBlock Text="RECORDS" Foreground="#294149" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <Border Grid.Column="3" Background="#CFD9D5" BorderBrush="#849590" BorderThickness="0,1,0,0">
+                    <TextBlock Text="SETUP" Foreground="#294149" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                </Grid>
+              </Grid>
+            </Border>
+          </Border>
+
+          <Border Grid.Column="4"
+                  CornerRadius="10"
+                  Background="#263238"
+                  BorderBrush="#63727A"
+                  BorderThickness="1.2"
+                  Padding="8,10">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="4">
+              <Button Classes="hardware functionKey" Command="{Binding FaceplateMeasureCommand}"><TextBlock Text="F1&#10;MEAS" TextAlignment="Center" FontSize="9" /></Button>
+              <Button Classes="hardware functionKey" Command="{Binding FaceplateEventsCommand}"><TextBlock Text="F2&#10;EVNT" TextAlignment="Center" FontSize="9" /></Button>
+              <Button Classes="hardware functionKey" Command="{Binding FaceplateRecordsCommand}"><TextBlock Text="F3&#10;RECD" TextAlignment="Center" FontSize="9" /></Button>
+              <Button Classes="hardware functionKey" Command="{Binding FaceplateSetupCommand}"><TextBlock Text="F4&#10;SET" TextAlignment="Center" FontSize="9" /></Button>
+              <Button Classes="hardware functionKey" Command="{Binding RunCommand}"><TextBlock Text="F5&#10;RUN" TextAlignment="Center" FontSize="9" /></Button>
+              <Button Classes="hardware functionKey" Content="RESET" Command="{Binding ResetRelayCommand}" Foreground="#65C8F5" FontSize="9.5" />
             </StackPanel>
-            <Border Grid.Column="1" Width="88" Height="4" CornerRadius="2" Background="#3CA0D8" Opacity="0.72" VerticalAlignment="Center" />
-          </Grid>
+          </Border>
         </Grid>
-      </Border>
-    </Grid>
-  </Viewbox>
+
+        <Border Grid.Row="3"
+                CornerRadius="12"
+                Background="#263238"
+                BorderBrush="#63727A"
+                BorderThickness="1.2"
+                Padding="12,11">
+          <Grid ColumnDefinitions="92,*,92">
+            <StackPanel Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="9">
+              <Button Classes="hardware" Content="⌂" FontSize="18" Command="{Binding FaceplateHomeCommand}" />
+              <Button Classes="hardware" Content="☰" FontSize="17" Command="{Binding FaceplateMenuCommand}" />
+            </StackPanel>
+
+            <Border Grid.Column="1"
+                    Width="188"
+                    Height="150"
+                    CornerRadius="21"
+                    Background="#172126"
+                    BorderBrush="#3FA7D7"
+                    BorderThickness="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+              <Grid RowDefinitions="50,50,50"
+                    ColumnDefinitions="60,60,60"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <Button Grid.Row="0" Grid.Column="1" Classes="hardware" Content="▲" FontSize="15" Command="{Binding FaceplatePreviousCommand}" />
+                <Button Grid.Row="1" Grid.Column="0" Classes="hardware" Content="◀" FontSize="15" Command="{Binding FaceplatePreviousCommand}" />
+                <Button Grid.Row="1" Grid.Column="1" Classes="hardware" Content="OK" FontSize="11" Command="{Binding FaceplateOkCommand}" />
+                <Button Grid.Row="1" Grid.Column="2" Classes="hardware" Content="▶" FontSize="15" Command="{Binding FaceplateNextCommand}" />
+                <Button Grid.Row="2" Grid.Column="1" Classes="hardware" Content="▼" FontSize="15" Command="{Binding FaceplateNextCommand}" />
+              </Grid>
+            </Border>
+
+            <StackPanel Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="9">
+              <Button Classes="hardware" Content="↩" FontSize="17" Command="{Binding FaceplateBackCommand}" />
+              <Button Classes="hardware" Content="☆" FontSize="19" Command="{Binding FaceplateFavoriteCommand}" />
+              <Border Width="52"
+                      Height="30"
+                      CornerRadius="5"
+                      Background="#131C21"
+                      BorderBrush="#728189"
+                      BorderThickness="1">
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                  <Border Height="3" Width="33" CornerRadius="2" Background="#45B8EC" />
+                  <TextBlock Text="USB" Foreground="#94A5AD" FontSize="7.5" HorizontalAlignment="Center" />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </Grid>
+        </Border>
+
+        <Grid Grid.Row="4"
+              ColumnDefinitions="*,Auto"
+              Margin="3,8,3,0">
+          <StackPanel VerticalAlignment="Center"
+                      Spacing="2">
+            <TextBlock Text="VIRTUAL TRIP OUTPUT ONLY"
+                       Foreground="#A8B7BE"
+                       FontSize="9" />
+            <TextBlock Text="{Binding SettingsGroupText}"
+                       Foreground="#8B9CA4"
+                       FontFamily="Cascadia Mono,Consolas,monospace"
+                       FontSize="8.5" />
+          </StackPanel>
+          <Border Grid.Column="1"
+                  Width="96"
+                  Height="4"
+                  CornerRadius="2"
+                  Background="#45B8EC"
+                  Opacity="0.88"
+                  VerticalAlignment="Center" />
+        </Grid>
+      </Grid>
+    </Border>
+  </Grid>
 </UserControl>
