@@ -2,48 +2,49 @@
 
 ## Objective
 
-The default Avalonia operator workspace must follow the approved WPF P6 information hierarchy while remaining a native, cross-platform Avalonia implementation.
+Bring the Avalonia operator workspace to functional and visual parity with the approved Windows WPF P6 composition without duplicating protection, capture, trust, injection, annunciation, operation-record, or evidence authorities.
 
-The target composition is:
+## Completed foundation
 
-1. compact product header;
-2. source, adapter, SV stream, and view toolbar;
-3. large SMV waveform and phasor evidence workspace;
-4. protection-operation summary and event trace;
-5. full-height physical-relay faceplate;
-6. compact engineering status footer.
+- compact product header and source toolbar;
+- P6-style SMV waveform workspace;
+- native current phasor presentation;
+- full-height virtual relay faceplate;
+- protection-operation and event evidence region;
+- engineering workspaces retained in an overlay tools pane.
 
-Advanced source editing, 4I+4V injection, process-bus configuration, protection settings, evidence export, and event history remain available through the engineering-tools pane. They must not permanently reduce the primary monitoring workspace.
+## P0.1 — faceplate readability
 
-## Authority boundary
+Completed:
 
-Visual parity must not introduce a second protection or measurement authority.
+- removed whole-faceplate `Viewbox` scaling;
+- made the relay casing stretch within the equipment bay while retaining minimum readable dimensions;
+- enlarged LCD text, hardware keys, status labels, and branding;
+- rebuilt relay lamps with bezel, cavity, vivid lens, inner glow, bright core, and stronger active colors;
+- reduced unused equipment-bay margin while preserving the physical-relay composition.
 
-- waveform data comes from the existing selected display source;
-- phasors come from `PhasorDisplayProjector` and the existing measurement frame;
-- lamps and LCD content come from the existing annunciation and faceplate projection;
-- source switching continues to use guarded process-bus handover;
-- relay reset, source reset, settings application, evidence export, and capture/replay retain their existing semantics.
+## P0.2 — operator workspace readability
 
-## Acceptance criteria
+Completed:
 
-- the relay faceplate is readable at the default 1520 × 900 window size;
-- waveform and phasor plots are visible simultaneously in the default DUAL view;
-- source/adapter/stream context remains visible without opening the tools pane;
-- protection operation and event trace remain visible below the signal workspace;
-- the tools pane exposes all migration-era engineering functions;
-- the application builds and tests on Windows, Linux, and macOS;
-- no WPF assembly or `System.Windows` dependency is introduced;
-- no raster screenshot is used as the relay implementation;
-- manual screenshots are reviewed at default and minimum supported window sizes before merge.
+- converted fixed adapter and SV-stream toolbar fields to responsive star-sized columns;
+- replaced toolbar Unicode controls with deterministic vector icons and operator tooltips;
+- widened the phasor region in DUAL mode;
+- reserved an explicit waveform legend band and increased waveform headroom;
+- added deterministic phasor-label collision avoidance;
+- separated the primary protection operation from secondary stages;
+- expanded and made the event trace scrollable;
+- replaced the ambiguous `LAB READY` operation badge with the active protection/trust state.
 
-## Remaining visual review
+## Remaining visual gates
 
-The first rendered build should be compared with the approved P6 reference for:
+- screenshot review at 1520 × 900 after P0.2;
+- compact-window review at 1280 × 760;
+- display-scaling review at 125% and 150%;
+- typography comparison on Windows, Ubuntu, and macOS;
+- final color, spacing, and equipment-bay polish;
+- interaction review for source handover, relay reset, fault injection, SMV degradation, and faceplate navigation.
 
-- faceplate width and vertical scale;
-- waveform/phasor split ratio;
-- header and toolbar density;
-- typography and engineering-value alignment;
-- panel borders and background contrast;
-- minimum-window behavior and tools-pane overlay.
+## Safety boundary
+
+The Avalonia shell is a presentation layer over existing portable/shared authorities. It must not create a second protection engine, capture authority, trust decision, operation recorder, evidence serializer, or physical-output path.
