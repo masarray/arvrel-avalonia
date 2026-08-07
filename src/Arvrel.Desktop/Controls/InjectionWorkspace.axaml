@@ -5,227 +5,242 @@
              x:DataType="vm:MainWindowViewModel"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
+  <UserControl.Resources>
+    <DataTemplate x:Key="InjectionChannelRowTemplate"
+                  x:DataType="vm:InjectionChannelViewModel">
+      <Border MinHeight="45"
+              Background="#FFFFFF"
+              BorderBrush="#E0E7EA"
+              BorderThickness="0,0,0,1"
+              Padding="9,5">
+        <Grid ColumnDefinitions="38,92,*,88"
+              ColumnSpacing="8">
+          <CheckBox Grid.Column="0"
+                    IsChecked="{Binding Enabled, Mode=TwoWay}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+
+          <StackPanel Grid.Column="1"
+                      VerticalAlignment="Center"
+                      Spacing="0">
+            <TextBlock Text="{Binding EngineeringSignalLabel}"
+                       Foreground="#1E5F80"
+                       FontSize="10.5"
+                       FontWeight="Bold" />
+            <TextBlock Text="{Binding SignalLabel}"
+                       Foreground="#8A9AA2"
+                       FontSize="8.2" />
+          </StackPanel>
+
+          <Grid Grid.Column="2"
+                ColumnDefinitions="*,24">
+            <TextBox Classes="injectionEditor"
+                     Text="{Binding RmsText, Mode=TwoWay}" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding Unit}"
+                       Foreground="#5E737D"
+                       FontFamily="Cascadia Mono,Consolas,monospace"
+                       FontSize="9.5"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+          </Grid>
+
+          <TextBox Grid.Column="3"
+                   Classes="injectionEditor"
+                   Text="{Binding AngleText, Mode=TwoWay}" />
+        </Grid>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
   <UserControl.Styles>
-    <Style Selector="Border.injectionCard">
-      <Setter Property="Background" Value="#F8FAFB" />
-      <Setter Property="BorderBrush" Value="#CBD6DC" />
+    <Style Selector="Border.testSetCard">
+      <Setter Property="Background" Value="#FFFFFF" />
+      <Setter Property="BorderBrush" Value="#C7D3D9" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="5" />
     </Style>
-    <Style Selector="TextBlock.injectionLabel">
-      <Setter Property="Foreground" Value="#667C87" />
-      <Setter Property="FontSize" Value="8.8" />
+    <Style Selector="TextBlock.testSetCaption">
+      <Setter Property="Foreground" Value="#728690" />
+      <Setter Property="FontSize" Value="8.7" />
       <Setter Property="FontWeight" Value="Bold" />
     </Style>
-    <Style Selector="TextBlock.injectionValue">
-      <Setter Property="Foreground" Value="#233A45" />
-      <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
-      <Setter Property="FontSize" Value="10.2" />
-      <Setter Property="FontWeight" Value="SemiBold" />
-    </Style>
     <Style Selector="TextBox.injectionEditor">
-      <Setter Property="MinHeight" Value="27" />
-      <Setter Property="Height" Value="27" />
+      <Setter Property="MinHeight" Value="28" />
+      <Setter Property="Height" Value="28" />
       <Setter Property="Padding" Value="7,3" />
       <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
-      <Setter Property="FontSize" Value="10.2" />
+      <Setter Property="FontSize" Value="10.3" />
       <Setter Property="HorizontalContentAlignment" Value="Right" />
     </Style>
-    <Style Selector="Button.injectionAction">
-      <Setter Property="MinHeight" Value="30" />
+    <Style Selector="Button.testSetAction">
+      <Setter Property="MinHeight" Value="31" />
       <Setter Property="Padding" Value="10,5" />
-      <Setter Property="FontSize" Value="10.2" />
+      <Setter Property="FontSize" Value="10" />
     </Style>
   </UserControl.Styles>
 
-  <Grid Margin="4,8,4,4"
-        RowDefinitions="Auto,7,*,7,Auto">
+  <Grid Margin="4,7,4,4"
+        RowDefinitions="52,8,*,8,48">
     <Border Grid.Row="0"
-            Classes="injectionCard"
-            Padding="11,9">
-      <Grid ColumnDefinitions="*,Auto">
-        <StackPanel Spacing="2"
-                    VerticalAlignment="Center">
-          <StackPanel Orientation="Horizontal"
-                      Spacing="8">
-            <TextBlock Text="ADVANCED INJECTION LABORATORY"
-                       Foreground="#213945"
-                       FontSize="13"
-                       FontWeight="SemiBold" />
-            <Border Padding="7,2"
-                    CornerRadius="4"
-                    Background="#DDEEF7"
-                    BorderBrush="#A9CDDF"
-                    BorderThickness="1">
-              <TextBlock Text="DIRECT"
-                         Foreground="#216D95"
-                         FontSize="8.7"
-                         FontWeight="Bold" />
-            </Border>
-            <Border Padding="7,2"
-                    CornerRadius="4"
-                    Background="#E7F5EB"
-                    BorderBrush="#B6D9C0"
-                    BorderThickness="1">
-              <TextBlock Text="{Binding OutputStateText}"
-                         Foreground="#287544"
-                         FontSize="8.7"
-                         FontWeight="Bold" />
-            </Border>
-          </StackPanel>
-          <TextBlock Text="Virtual secondary-injection workspace · editable 4I + 4V"
-                     Foreground="#71858F"
-                     FontSize="9.5" />
+            Classes="testSetCard"
+            Padding="12,7">
+      <Grid ColumnDefinitions="*,178,82"
+            ColumnSpacing="9">
+        <StackPanel VerticalAlignment="Center"
+                    Spacing="1">
+          <TextBlock Text="SECONDARY INJECTION TEST SET"
+                     Foreground="#1D3440"
+                     FontSize="13.2"
+                     FontWeight="SemiBold" />
+          <TextBlock Text="{Binding InjectionEditorStatus}"
+                     Foreground="#6F838D"
+                     FontSize="9.2"
+                     TextTrimming="CharacterEllipsis" />
         </StackPanel>
 
         <StackPanel Grid.Column="1"
-                    Orientation="Horizontal"
-                    Spacing="8"
-                    VerticalAlignment="Center">
-          <StackPanel Width="180" Spacing="3">
-            <TextBlock Classes="injectionLabel" Text="PRESET" />
-            <ComboBox ItemsSource="{Binding PresetNames}"
-                      SelectedItem="{Binding SelectedPreset, Mode=TwoWay}"
-                      MinHeight="30" />
-          </StackPanel>
-          <StackPanel Width="82" Spacing="3">
-            <TextBlock Classes="injectionLabel" Text="FREQ Hz" />
+                    Spacing="2">
+          <TextBlock Classes="testSetCaption"
+                     Text="PRESET" />
+          <ComboBox ItemsSource="{Binding PresetNames}"
+                    SelectedItem="{Binding SelectedPreset, Mode=TwoWay}"
+                    MinHeight="29" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Spacing="2">
+          <TextBlock Classes="testSetCaption"
+                     Text="FREQUENCY" />
+          <Grid ColumnDefinitions="*,20">
             <TextBox Text="{Binding FrequencyText, Mode=TwoWay}"
-                     MinHeight="30"
+                     MinHeight="29"
                      HorizontalContentAlignment="Right" />
-          </StackPanel>
+            <TextBlock Grid.Column="1"
+                       Text="Hz"
+                       Foreground="#657B86"
+                       FontSize="9"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center" />
+          </Grid>
         </StackPanel>
       </Grid>
     </Border>
 
-    <Border Grid.Row="2"
-            Classes="injectionCard"
-            Padding="0">
-      <Grid RowDefinitions="34,*">
-        <Border Background="#EAF0F3"
-                BorderBrush="#C8D4DA"
-                BorderThickness="0,0,0,1"
-                Padding="8,0">
-          <Grid ColumnDefinitions="42,126,112,104,62,*"
-                ColumnSpacing="8">
-            <TextBlock Grid.Column="0" Classes="injectionLabel" Text="EN" VerticalAlignment="Center" HorizontalAlignment="Center" />
-            <TextBlock Grid.Column="1" Classes="injectionLabel" Text="SIGNAL" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Classes="injectionLabel" Text="RMS" VerticalAlignment="Center" HorizontalAlignment="Right" />
-            <TextBlock Grid.Column="3" Classes="injectionLabel" Text="ANGLE°" VerticalAlignment="Center" HorizontalAlignment="Right" />
-            <TextBlock Grid.Column="4" Classes="injectionLabel" Text="UNIT" VerticalAlignment="Center" HorizontalAlignment="Center" />
-            <TextBlock Grid.Column="5" Classes="injectionLabel" Text="PROVENANCE / MAPPING" VerticalAlignment="Center" />
+    <Grid Grid.Row="2"
+          ColumnDefinitions="*,8,*">
+      <Border Grid.Column="0"
+              Classes="testSetCard"
+              Padding="0">
+        <Grid RowDefinitions="38,27,*">
+          <Border Background="#EAF2F6"
+                  BorderBrush="#C6D5DC"
+                  BorderThickness="0,0,0,1"
+                  Padding="10,0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="CURRENT OUTPUTS"
+                         Foreground="#21485C"
+                         FontSize="11.5"
+                         FontWeight="Bold"
+                         VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1"
+                         Text="4 I"
+                         Foreground="#2A779E"
+                         FontFamily="Cascadia Mono,Consolas,monospace"
+                         FontSize="10"
+                         FontWeight="Bold"
+                         VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+          <Grid Grid.Row="1"
+                Background="#F7F9FA"
+                ColumnDefinitions="38,92,*,88"
+                ColumnSpacing="8"
+                Padding="9,0">
+            <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
           </Grid>
-        </Border>
+          <ItemsControl Grid.Row="2"
+                        ItemsSource="{Binding CurrentInjectionChannels}"
+                        ItemTemplate="{StaticResource InjectionChannelRowTemplate}" />
+        </Grid>
+      </Border>
 
-        <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-          <ItemsControl ItemsSource="{Binding InjectionChannels}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate x:DataType="vm:InjectionChannelViewModel">
-                <Border MinHeight="37"
-                        Background="#FFFFFF"
-                        BorderBrush="#DEE5E8"
-                        BorderThickness="0,0,0,1"
-                        Padding="8,4">
-                  <Grid ColumnDefinitions="42,126,112,104,62,*"
-                        ColumnSpacing="8">
-                    <CheckBox Grid.Column="0"
-                              IsChecked="{Binding Enabled, Mode=TwoWay}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center" />
-
-                    <StackPanel Grid.Column="1"
-                                Spacing="0"
-                                VerticalAlignment="Center">
-                      <TextBlock Text="{Binding EngineeringSignalLabel}"
-                                 Foreground="#245E7C"
-                                 FontSize="10.4"
-                                 FontWeight="Bold" />
-                      <TextBlock Text="{Binding SignalLabel}"
-                                 Foreground="#82939C"
-                                 FontSize="8.2" />
-                    </StackPanel>
-
-                    <TextBox Grid.Column="2"
-                             Classes="injectionEditor"
-                             Text="{Binding RmsText, Mode=TwoWay}" />
-                    <TextBox Grid.Column="3"
-                             Classes="injectionEditor"
-                             Text="{Binding AngleText, Mode=TwoWay}" />
-
-                    <TextBlock Grid.Column="4"
-                               Classes="injectionValue"
-                               Text="{Binding Unit}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-
-                    <StackPanel Grid.Column="5"
-                                Spacing="0"
-                                VerticalAlignment="Center">
-                      <TextBlock Text="{Binding Provenance}"
-                                 Foreground="#3D5966"
-                                 FontSize="9.5"
-                                 FontWeight="SemiBold"
-                                 TextTrimming="CharacterEllipsis" />
-                      <TextBlock Text="{Binding ChannelFamily}"
-                                 Foreground="#8A9AA2"
-                                 FontSize="8.2" />
-                    </StackPanel>
-                  </Grid>
-                </Border>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-        </ScrollViewer>
-      </Grid>
-    </Border>
+      <Border Grid.Column="2"
+              Classes="testSetCard"
+              Padding="0">
+        <Grid RowDefinitions="38,27,*">
+          <Border Background="#EAF2F6"
+                  BorderBrush="#C6D5DC"
+                  BorderThickness="0,0,0,1"
+                  Padding="10,0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="VOLTAGE OUTPUTS"
+                         Foreground="#21485C"
+                         FontSize="11.5"
+                         FontWeight="Bold"
+                         VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1"
+                         Text="4 V"
+                         Foreground="#2A779E"
+                         FontFamily="Cascadia Mono,Consolas,monospace"
+                         FontSize="10"
+                         FontWeight="Bold"
+                         VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+          <Grid Grid.Row="1"
+                Background="#F7F9FA"
+                ColumnDefinitions="38,92,*,88"
+                ColumnSpacing="8"
+                Padding="9,0">
+            <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
+          </Grid>
+          <ItemsControl Grid.Row="2"
+                        ItemsSource="{Binding VoltageInjectionChannels}"
+                        ItemTemplate="{StaticResource InjectionChannelRowTemplate}" />
+        </Grid>
+      </Border>
+    </Grid>
 
     <Border Grid.Row="4"
-            Classes="injectionCard"
-            Padding="10,8">
+            Classes="testSetCard"
+            Padding="9,7">
       <Grid ColumnDefinitions="*,Auto"
-            ColumnSpacing="12">
-        <Grid RowDefinitions="Auto,Auto"
-              VerticalAlignment="Center">
-          <StackPanel Orientation="Horizontal"
-                      Spacing="8">
-            <TextBlock Classes="injectionLabel"
-                       Text="SOURCE STATUS"
-                       VerticalAlignment="Center" />
-            <TextBlock Text="{Binding InjectionEditorStatus}"
-                       Foreground="#2D4A58"
-                       FontSize="9.7"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" />
-            <TextBlock Text="{Binding InjectionFingerprintText}"
-                       Foreground="#52717F"
-                       FontFamily="Cascadia Mono,Consolas,monospace"
-                       FontSize="9.2"
-                       VerticalAlignment="Center" />
-          </StackPanel>
-          <TextBlock Grid.Row="1"
-                     Text="{Binding ProvenanceText}"
-                     Foreground="#7A8D96"
-                     FontSize="8.8"
-                     Margin="0,3,0,0"
-                     TextTrimming="CharacterEllipsis" />
-        </Grid>
+            ColumnSpacing="10">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="8"
+                    VerticalAlignment="Center">
+          <TextBlock Text="{Binding OutputStateText}"
+                     Foreground="#287544"
+                     FontSize="9.5"
+                     FontWeight="Bold" />
+          <TextBlock Text="{Binding InjectionFingerprintText}"
+                     Foreground="#5B7380"
+                     FontFamily="Cascadia Mono,Consolas,monospace"
+                     FontSize="9.2" />
+        </StackPanel>
 
         <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
-                    Spacing="6"
+                    Spacing="5"
                     VerticalAlignment="Center">
-          <Button Classes="injectionAction primary"
+          <Button Classes="testSetAction primary"
                   Command="{Binding ApplyInjectionCommand}"
-                  Content="APPLY CONFIGURED SOURCE" />
-          <Button Classes="injectionAction warning"
+                  Content="APPLY" />
+          <Button Classes="testSetAction warning"
                   Command="{Binding FaultCommand}"
-                  Content="LOAD + START A-G FAULT" />
-          <Button Classes="injectionAction"
+                  Content="A-G FAULT" />
+          <Button Classes="testSetAction"
                   Command="{Binding ClearInjectionCommand}"
-                  Content="CLEAR INJECTION" />
-          <Button Classes="injectionAction"
+                  Content="CLEAR" />
+          <Button Classes="testSetAction"
                   Command="{Binding ResetRelayCommand}"
                   Content="RESET RELAY" />
         </StackPanel>
