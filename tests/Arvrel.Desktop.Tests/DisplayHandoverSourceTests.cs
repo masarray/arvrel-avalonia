@@ -40,7 +40,8 @@ public sealed class DisplayHandoverSourceTests
         StringAssert.Contains(source, "if (!IsProcessBusDisplayActive)");
 
         StringAssert.Contains(faceplate, "PhaseAAnnunciation => DisplayAnnunciation.PhaseA");
-        StringAssert.Contains(faceplate, "Compact(DisplayActiveElement, 24)");
+        StringAssert.Contains(faceplate, "CurrentOperationRecord => ResolveCurrentOperationRecord()");
+        StringAssert.Contains(faceplate, "FormatOperationElement(CurrentOperationRecord)");
         StringAssert.Contains(faceplate, "DisplayFingerprintText");
         StringAssert.Contains(faceplate, "DisplayProvenanceText");
     }
