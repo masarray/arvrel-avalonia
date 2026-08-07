@@ -46,8 +46,8 @@ public sealed class PhasorScope : Control
 
         var footerHeight = Math.Min(42, height * 0.16);
         var plotHeight = height - footerHeight;
-        var center = new Point(width * 0.5, plotHeight * 0.52);
-        var radius = Math.Max(24, Math.Min(width * 0.40, plotHeight * 0.39));
+        var center = new Point(width * 0.5, plotHeight * 0.53);
+        var radius = Math.Max(24, Math.Min(width * 0.42, plotHeight * 0.40));
 
         DrawGrid(context, center, radius);
         DrawHeader(context, width);
@@ -61,9 +61,10 @@ public sealed class PhasorScope : Control
 
         var maxMagnitude = frame.Vectors.Select(vector => vector.Magnitude).DefaultIfEmpty(1).Max();
         maxMagnitude = Math.Max(maxMagnitude, 1e-9);
+        var occupiedLabels = new List<Rect>();
 
-        foreach (var vector in frame.Vectors)
-            DrawVector(context, center, radius, vector, maxMagnitude);
+        foreach (var vector in frame.Vectors.OrderByDescending(vector => vector.Magnitude))
+            DrawVector(context, center, radius, vector, maxMagnitude, width, plotHeight, occupiedLabels);
 
         DrawFooter(context, width, height, footerHeight, frame);
     }
@@ -109,21 +110,26 @@ public sealed class PhasorScope : Control
         Point center,
         double radius,
         PhasorDisplayVector vector,
-        double maximum)
+        double maximum,
+        double width,
+        double plotHeight,
+        ICollection<Rect> occupiedLabels)
     {
         var brush = ResolveBrush(vector.Key);
-        var pen = new Pen(brush, vector.IsResidual ? 2.4 : 2.1);
+        var pen = new Pen(brush, vector.IsResidual ? 2.5 : 2.15);
         var length = radius * Math.Clamp(vector.Magnitude / maximum, 0.08, 0.94);
         var radians = vector.AngleDegrees * Math.PI / 180d;
+        var cosine = Math.Cos(radians);
+        var sine = Math.Sin(radians);
         var tip = new Point(
-            center.X + Math.Cos(radians) * length,
-            center.Y - Math.Sin(radians) * length);
+            center.X + cosine * length,
+            center.Y - sine * length);
 
         context.DrawLine(pen, center, tip);
 
         var back = new Point(
-            tip.X - Math.Cos(radians) * 10,
-            tip.Y + Math.Sin(radians) * 10);
+            tip.X - cosine * 10,
+            tip.Y + sine * 10);
         var left = new Point(
             back.X + Math.Cos(radians + Math.PI / 2) * 4,
             back.Y - Math.Sin(radians + Math.PI / 2) * 4);
@@ -133,17 +139,78 @@ public sealed class PhasorScope : Control
         context.DrawLine(pen, tip, left);
         context.DrawLine(pen, tip, right);
 
-        var label = vector.Label;
         var formatted = new FormattedText(
-            label,
+            vector.Label,
             CultureInfo.InvariantCulture,
             FlowDirection.LeftToRight,
             MonoTypeface,
-            9,
+            9.5,
             brush);
-        var labelX = tip.X + (Math.Cos(radians) >= 0 ? 5 : -formatted.Width - 5);
-        var labelY = tip.Y + (Math.Sin(radians) >= 0 ? -formatted.Height - 3 : 3);
-        context.DrawText(formatted, new Point(labelX, labelY));
+        var labelPoint = PlaceLabel(tip, radians, formatted, width, plotHeight, occupiedLabels);
+        context.DrawText(formatted, labelPoint);
+        occupiedLabels.Add(new Rect(
+            labelPoint.X - 3,
+            labelPoint.Y - 2,
+            formatted.Width + 6,
+            formatted.Height + 4));
+    }
+
+    private static Point PlaceLabel(
+        Point tip,
+        double radians,
+        FormattedText formatted,
+        double width,
+        double plotHeight,
+        IEnumerable<Rect> occupiedLabels)
+    {
+        var cosine = Math.Cos(radians);
+        var sine = Math.Sin(radians);
+        var outwardX = cosine >= 0 ? 7 : -formatted.Width - 7;
+        var outwardY = sine >= 0 ? -formatted.Height - 5 : 5;
+        var tangentX = -sine * 14;
+        var tangentY = -cosine * 14;
+        var candidates = new[]
+        {
+            new Point(tip.X + outwardX, tip.Y + outwardY),
+            new Point(tip.X + outwardX + tangentX, tip.Y + outwardY + tangentY),
+            new Point(tip.X + outwardX - tangentX, tip.Y + outwardY - tangentY),
+            new Point(tip.X + (cosine >= 0 ? 8 : -formatted.Width - 8), tip.Y - formatted.Height - 10),
+            new Point(tip.X + (cosine >= 0 ? 8 : -formatted.Width - 8), tip.Y + 10)
+        };
+
+        var maxX = Math.Max(4, width - formatted.Width - 4);
+        var maxY = Math.Max(26, plotHeight - formatted.Height - 5);
+        var best = new Point(
+            Math.Clamp(candidates[0].X, 4, maxX),
+            Math.Clamp(candidates[0].Y, 26, maxY));
+        var bestScore = double.PositiveInfinity;
+
+        foreach (var candidate in candidates)
+        {
+            var point = new Point(
+                Math.Clamp(candidate.X, 4, maxX),
+                Math.Clamp(candidate.Y, 26, maxY));
+            var bounds = new Rect(point.X - 3, point.Y - 2, formatted.Width + 6, formatted.Height + 4);
+            var overlap = occupiedLabels.Sum(existing => IntersectionArea(bounds, existing));
+            var displacement = Math.Abs(point.X - candidates[0].X) + Math.Abs(point.Y - candidates[0].Y);
+            var score = overlap * 1000 + displacement;
+            if (score >= bestScore)
+                continue;
+
+            bestScore = score;
+            best = point;
+            if (overlap <= 0)
+                break;
+        }
+
+        return best;
+    }
+
+    private static double IntersectionArea(Rect left, Rect right)
+    {
+        var width = Math.Max(0, Math.Min(left.Right, right.Right) - Math.Max(left.Left, right.Left));
+        var height = Math.Max(0, Math.Min(left.Bottom, right.Bottom) - Math.Max(left.Top, right.Top));
+        return width * height;
     }
 
     private static void DrawFooter(
