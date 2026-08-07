@@ -85,7 +85,7 @@ public sealed partial class MainWindowViewModel
                     : $"READY · {catalog.Groups.Count} persisted group(s) available";
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or ArgumentException)
         {
             _settingGroupPersistenceStatus = $"LOAD FAILED · {ex.Message}";
             AddEvent("SET STORE", _settingGroupPersistenceStatus);
@@ -100,13 +100,22 @@ public sealed partial class MainWindowViewModel
         if (!TryBuildProtectionSettings(out var settings))
             return;
 
-        ApplyValidatedProtectionSettings(settings, "APPLIED", addEvent: true);
+        var previousSelection = SelectedPersistedSettingGroup;
+        var hadPrevious = _persistedSettingGroups.TryGetValue(settings.GroupName, out var previousSettings);
         _persistedSettingGroups[settings.GroupName] = settings;
         RefreshPersistedSettingGroupNames(settings.GroupName);
 
         if (!TryPersistSettingGroups(settings.GroupName))
+        {
+            if (hadPrevious && previousSettings is not null)
+                _persistedSettingGroups[settings.GroupName] = previousSettings;
+            else
+                _persistedSettingGroups.Remove(settings.GroupName);
+            RefreshPersistedSettingGroupNames(previousSelection);
             return;
+        }
 
+        ApplyValidatedProtectionSettings(settings, "APPLIED", addEvent: true);
         _settingGroupPersistenceStatus = $"SAVED · {settings.GroupName} revision {settings.Revision}";
         AddEvent("SET SAVE", $"{settings.GroupName} rev {settings.Revision} · {settings.Fingerprint()[..12]}");
         OnPropertyChanged(nameof(SettingGroupPersistenceStatus));
@@ -121,10 +130,10 @@ public sealed partial class MainWindowViewModel
             return;
         }
 
-        ApplyValidatedProtectionSettings(settings, "LOADED", addEvent: true);
         if (!TryPersistSettingGroups(settings.GroupName))
             return;
 
+        ApplyValidatedProtectionSettings(settings, "LOADED", addEvent: true);
         _settingGroupPersistenceStatus = $"LOADED · {settings.GroupName} revision {settings.Revision}";
         AddEvent("SET LOAD", $"{settings.GroupName} rev {settings.Revision}");
         OnPropertyChanged(nameof(SettingGroupPersistenceStatus));
@@ -133,15 +142,20 @@ public sealed partial class MainWindowViewModel
     private void DeleteSelectedSettingGroup()
     {
         var selected = SelectedPersistedSettingGroup;
-        if (selected is null || !_persistedSettingGroups.Remove(selected))
+        if (selected is null || !_persistedSettingGroups.TryGetValue(selected, out var removed))
         {
             SetSettingGroupPersistenceFailure("Select a persisted setting group first.");
             return;
         }
 
+        _persistedSettingGroups.Remove(selected);
         RefreshPersistedSettingGroupNames(PersistedSettingGroupNames.FirstOrDefault());
         if (!TryPersistSettingGroups(SelectedPersistedSettingGroup))
+        {
+            _persistedSettingGroups[selected] = removed;
+            RefreshPersistedSettingGroupNames(selected);
             return;
+        }
 
         _settingGroupPersistenceStatus = $"DELETED · {selected} · active relay settings unchanged";
         AddEvent("SET DELETE", selected);
@@ -185,7 +199,6 @@ public sealed partial class MainWindowViewModel
         if (processBusWasDisplayed)
         {
             SelectedProcessBusStream = null;
-            ActivateInternalDisplay();
             SetDisplayHandoverStatus(
                 "Protection settings changed; display returned to INTERNAL LAB while process-bus runtimes rebuild from fresh frames.");
         }
@@ -233,7 +246,7 @@ public sealed partial class MainWindowViewModel
             _settingGroupStore.Save(_persistedSettingGroups.Values, activeGroupName);
             return true;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or ArgumentException)
         {
             SetSettingGroupPersistenceFailure(ex.Message);
             return false;
