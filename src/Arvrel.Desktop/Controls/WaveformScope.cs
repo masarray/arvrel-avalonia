@@ -47,6 +47,7 @@ public sealed class WaveformScope : Control
         if (!viewport.IsRenderable)
             return;
 
+        DrawLegend(context, viewport);
         DrawGrid(context, viewport);
         if (Waveform is not { } waveform)
         {
@@ -72,6 +73,39 @@ public sealed class WaveformScope : Control
         DrawSeries(context, waveform.PhaseB, maximum, viewport, PhaseBPen);
         DrawSeries(context, waveform.PhaseC, maximum, viewport, PhaseCPen);
         DrawSeries(context, waveform.Residual, maximum, viewport, ResidualPen);
+    }
+
+    private static void DrawLegend(DrawingContext context, WaveformViewport viewport)
+    {
+        var entries = new (string Label, Pen Pen)[]
+        {
+            ("IA", PhaseAPen),
+            ("IB", PhaseBPen),
+            ("IC", PhaseCPen),
+            ("3I0 / IN", ResidualPen)
+        };
+
+        const double sampleWidth = 18;
+        const double gap = 12;
+        var measured = entries
+            .Select(entry => new FormattedText(
+                entry.Label,
+                CultureInfo.InvariantCulture,
+                FlowDirection.LeftToRight,
+                MonoTypeface,
+                9,
+                entry.Pen.Brush))
+            .ToArray();
+        var totalWidth = measured.Sum(text => sampleWidth + 5 + text.Width) + gap * (entries.Length - 1);
+        var x = Math.Max(viewport.Left + 52, viewport.Right - totalWidth);
+
+        for (var index = 0; index < entries.Length; index++)
+        {
+            var text = measured[index];
+            context.DrawLine(entries[index].Pen, new Point(x, 12), new Point(x + sampleWidth, 12));
+            context.DrawText(text, new Point(x + sampleWidth + 5, 6));
+            x += sampleWidth + 5 + text.Width + gap;
+        }
     }
 
     private static void DrawGrid(DrawingContext context, WaveformViewport viewport)
@@ -154,7 +188,7 @@ public sealed class WaveformScope : Control
             return;
 
         var center = viewport.Top + viewport.Height / 2d;
-        var scale = viewport.Height * 0.43 / maximum;
+        var scale = viewport.Height * 0.39 / maximum;
         var previous = new Point(viewport.Left, center - samples[0] * scale);
 
         for (var index = 1; index < samples.Count; index++)
