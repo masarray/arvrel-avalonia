@@ -1,0 +1,287 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Arvrel.Desktop.ViewModels"
+             x:Class="Arvrel.Desktop.Controls.ProtectionSettingsWorkspace"
+             x:DataType="vm:MainWindowViewModel">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="10" Margin="4,10,4,4">
+      <Border Classes="subtle">
+        <StackPanel Spacing="7">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Classes="section" Text="FULL PROTECTION SETTINGS" />
+              <TextBlock FontWeight="Bold" Foreground="#8ED5E8" Text="{Binding SettingsGroupText}" />
+            </StackPanel>
+            <TextBlock Grid.Column="1"
+                       Classes="caption"
+                       Text="{Binding SettingsFingerprintText}"
+                       VerticalAlignment="Center" />
+          </Grid>
+
+          <Grid ColumnDefinitions="*,90" ColumnSpacing="8">
+            <StackPanel Grid.Column="0" Spacing="3">
+              <TextBlock Classes="caption" Text="GROUP NAME" />
+              <TextBox Text="{Binding SettingsEditor.GroupName, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="3">
+              <TextBlock Classes="caption" Text="REVISION" />
+              <TextBox Text="{Binding SettingsEditor.RevisionText, Mode=TwoWay}"
+                       HorizontalContentAlignment="Right" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <Border Classes="subtle">
+        <StackPanel Spacing="7">
+          <TextBlock Classes="section" Text="PERSISTED SETTING GROUPS" />
+          <ComboBox ItemsSource="{Binding PersistedSettingGroupNames}"
+                    SelectedItem="{Binding SelectedPersistedSettingGroup, Mode=TwoWay}"
+                    PlaceholderText="No persisted group" />
+          <Grid ColumnDefinitions="*,*,*" ColumnSpacing="7">
+            <Button Grid.Column="0"
+                    Classes="primary"
+                    Command="{Binding SaveSettingGroupCommand}"
+                    Content="SAVE / UPDATE" />
+            <Button Grid.Column="1"
+                    Command="{Binding LoadSettingGroupCommand}"
+                    Content="LOAD" />
+            <Button Grid.Column="2"
+                    Command="{Binding DeleteSettingGroupCommand}"
+                    Content="DELETE" />
+          </Grid>
+          <TextBlock FontWeight="SemiBold"
+                     Text="{Binding SettingGroupPersistenceStatus}"
+                     TextWrapping="Wrap" />
+          <TextBlock Classes="caption"
+                     Text="{Binding SettingGroupStorePath}"
+                     TextTrimming="CharacterEllipsis"
+                     ToolTip.Tip="{Binding SettingGroupStorePath}" />
+        </StackPanel>
+      </Border>
+
+      <TabControl>
+        <TabItem Header="50 / 51">
+          <StackPanel Spacing="9" Margin="3,9,3,3">
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="50P" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="PHASE INSTANTANEOUS" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Phase50.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Phase50.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Phase50.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Phase50.DropoutText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="51P" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="PHASE TIME" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Phase51.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Phase51.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="CURVE" /><ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}" SelectedItem="{Binding SettingsEditor.Phase51.Curve, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="TMS" /><TextBox Text="{Binding SettingsEditor.Phase51.MultiplierText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DEFINITE ms" /><TextBox Text="{Binding SettingsEditor.Phase51.DefiniteDelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="MIN OP ms" /><TextBox Text="{Binding SettingsEditor.Phase51.MinimumOperateMsText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Phase51.DropoutText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="RESET" /><ComboBox ItemsSource="{Binding SettingsEditor.ResetModes}" SelectedItem="{Binding SettingsEditor.Phase51.ResetMode, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="RESET ms" /><TextBox Text="{Binding SettingsEditor.Phase51.ResetDelayMsText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Border Classes="subtle" IsVisible="{Binding SettingsEditor.Phase51.IsUserDefined}">
+                  <StackPanel Spacing="5">
+                    <TextBlock Classes="section" Text="USER-DEFINED CURVE" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="K" /><TextBox Text="{Binding SettingsEditor.Phase51.UserKText, Mode=TwoWay}" /></StackPanel>
+                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="ALPHA" /><TextBox Text="{Binding SettingsEditor.Phase51.UserAlphaText, Mode=TwoWay}" /></StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="C" /><TextBox Text="{Binding SettingsEditor.Phase51.UserCText, Mode=TwoWay}" /></StackPanel>
+                    </Grid>
+                    <TextBlock Classes="caption" Text="{Binding SettingsEditor.Phase51.CurveFormula}" TextWrapping="Wrap" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="50N" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="EARTH INSTANTANEOUS" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Earth50.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Earth50.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Earth50.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Earth50.DropoutText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="51N" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="EARTH TIME" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Earth51.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.Earth51.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="CURVE" /><ComboBox ItemsSource="{Binding SettingsEditor.CurveFamilies}" SelectedItem="{Binding SettingsEditor.Earth51.Curve, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="TMS" /><TextBox Text="{Binding SettingsEditor.Earth51.MultiplierText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DEFINITE ms" /><TextBox Text="{Binding SettingsEditor.Earth51.DefiniteDelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="MIN OP ms" /><TextBox Text="{Binding SettingsEditor.Earth51.MinimumOperateMsText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Earth51.DropoutText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="RESET" /><ComboBox ItemsSource="{Binding SettingsEditor.ResetModes}" SelectedItem="{Binding SettingsEditor.Earth51.ResetMode, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="RESET ms" /><TextBox Text="{Binding SettingsEditor.Earth51.ResetDelayMsText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Border Classes="subtle" IsVisible="{Binding SettingsEditor.Earth51.IsUserDefined}">
+                  <StackPanel Spacing="5">
+                    <TextBlock Classes="section" Text="USER-DEFINED CURVE" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                      <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="K" /><TextBox Text="{Binding SettingsEditor.Earth51.UserKText, Mode=TwoWay}" /></StackPanel>
+                      <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="ALPHA" /><TextBox Text="{Binding SettingsEditor.Earth51.UserAlphaText, Mode=TwoWay}" /></StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="C" /><TextBox Text="{Binding SettingsEditor.Earth51.UserCText, Mode=TwoWay}" /></StackPanel>
+                    </Grid>
+                    <TextBlock Classes="caption" Text="{Binding SettingsEditor.Earth51.CurveFormula}" TextWrapping="Wrap" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+
+        <TabItem Header="VOLTAGE">
+          <StackPanel Spacing="9" Margin="3,9,3,3">
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="27" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="UNDERVOLTAGE" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Undervoltage27.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP V" /><TextBox Text="{Binding SettingsEditor.Undervoltage27.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Undervoltage27.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="RESET RATIO" /><TextBox Text="{Binding SettingsEditor.Undervoltage27.RatioText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="MEASUREMENT" /><ComboBox ItemsSource="{Binding SettingsEditor.VoltageMeasurementModes}" SelectedItem="{Binding SettingsEditor.Undervoltage27.Mode, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="SELECTION" /><ComboBox ItemsSource="{Binding SettingsEditor.VoltageSelectionLogics}" SelectedItem="{Binding SettingsEditor.Undervoltage27.Logic, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="59" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="OVERVOLTAGE" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.Overvoltage59.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP V" /><TextBox Text="{Binding SettingsEditor.Overvoltage59.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.Overvoltage59.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.Overvoltage59.RatioText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="MEASUREMENT" /><ComboBox ItemsSource="{Binding SettingsEditor.VoltageMeasurementModes}" SelectedItem="{Binding SettingsEditor.Overvoltage59.Mode, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="SELECTION" /><ComboBox ItemsSource="{Binding SettingsEditor.VoltageSelectionLogics}" SelectedItem="{Binding SettingsEditor.Overvoltage59.Logic, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="59N" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="RESIDUAL OVERVOLTAGE" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.ResidualOvervoltage59N.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP V" /><TextBox Text="{Binding SettingsEditor.ResidualOvervoltage59N.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.ResidualOvervoltage59N.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.ResidualOvervoltage59N.DropoutText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <TextBlock Classes="caption"
+                           Text="Uses explicit VN / 3V0 when available and calculated VA+VB+VC fallback otherwise."
+                           TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+
+        <TabItem Header="DIRECTIONAL">
+          <StackPanel Spacing="9" Margin="3,9,3,3">
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="67P" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="DIRECTIONAL PHASE OVERCURRENT" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.DirectionalPhase67.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.DirectionalPhase67.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.DirectionalPhase67.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.DirectionalPhase67.DropoutText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="RCA deg" /><TextBox Text="{Binding SettingsEditor.DirectionalPhase67.CharacteristicAngleText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="MIN POL V" /><TextBox Text="{Binding SettingsEditor.DirectionalPhase67.MinimumPolarizingVoltageText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="SENSE" /><ComboBox ItemsSource="{Binding SettingsEditor.DirectionalSenses}" SelectedItem="{Binding SettingsEditor.DirectionalPhase67.Sense, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Classes="subtle">
+              <StackPanel Spacing="7">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0" FontWeight="Bold" Foreground="#8ED5E8" Text="67N" />
+                  <TextBlock Grid.Column="1" Margin="8,0" Classes="caption" Text="DIRECTIONAL EARTH OVERCURRENT" />
+                  <CheckBox Grid.Column="2" Content="ENABLED" IsChecked="{Binding SettingsEditor.DirectionalEarth67N.Enabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="PICKUP A" /><TextBox Text="{Binding SettingsEditor.DirectionalEarth67N.PickupText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="DELAY ms" /><TextBox Text="{Binding SettingsEditor.DirectionalEarth67N.DelayMsText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="DROPOUT" /><TextBox Text="{Binding SettingsEditor.DirectionalEarth67N.DropoutText, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                  <StackPanel Grid.Column="0" Spacing="2"><TextBlock Classes="caption" Text="RCA deg" /><TextBox Text="{Binding SettingsEditor.DirectionalEarth67N.CharacteristicAngleText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Classes="caption" Text="MIN POL V" /><TextBox Text="{Binding SettingsEditor.DirectionalEarth67N.MinimumPolarizingVoltageText, Mode=TwoWay}" /></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Classes="caption" Text="SENSE" /><ComboBox ItemsSource="{Binding SettingsEditor.DirectionalSenses}" SelectedItem="{Binding SettingsEditor.DirectionalEarth67N.Sense, Mode=TwoWay}" /></StackPanel>
+                </Grid>
+                <TextBlock Classes="caption"
+                           Text="Uses explicit IN / 3I0 and VN / 3V0 when decoded, with calculated residual fallback."
+                           TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+      </TabControl>
+
+      <Button Classes="primary"
+              Command="{Binding ApplySettingsCommand}"
+              Content="VALIDATE + APPLY ALL PROTECTION SETTINGS" />
+      <TextBlock FontWeight="SemiBold"
+                 Text="{Binding SettingsEditorStatus}"
+                 TextWrapping="Wrap" />
+      <TextBlock Classes="caption"
+                 Text="Applying a setting group resets protection timers and trip latches, preserves the internal injection source, and rebuilds process-bus runtimes from fresh frames."
+                 TextWrapping="Wrap" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
