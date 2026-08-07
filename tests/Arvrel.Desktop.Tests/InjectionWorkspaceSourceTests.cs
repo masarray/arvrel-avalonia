@@ -15,7 +15,7 @@ public sealed class InjectionWorkspaceSourceTests
         var projection = Read("src", "Arvrel.Desktop", "ViewModels", "MainWindowViewModel.InjectionUx.cs");
         var mainWindow = Read("src", "Arvrel.Desktop", "MainWindow.axaml.cs");
 
-        _ = XDocument.Parse(xaml, LoadOptions.PreserveWhitespace);
+        var document = XDocument.Parse(xaml, LoadOptions.PreserveWhitespace);
 
         StringAssert.Contains(xaml, "SECONDARY INJECTION TEST SET");
         StringAssert.Contains(xaml, "CURRENT OUTPUTS");
@@ -41,6 +41,10 @@ public sealed class InjectionWorkspaceSourceTests
         Assert.IsFalse(xaml.Contains("ADVANCED INJECTION LABORATORY", StringComparison.Ordinal));
         Assert.IsFalse(xaml.Contains("Virtual secondary-injection workspace", StringComparison.Ordinal));
         Assert.IsFalse(xaml.Contains("ChannelFamily", StringComparison.Ordinal));
+        Assert.IsFalse(
+            document.Descendants().Any(element =>
+                element.Name.LocalName == "Grid" && element.Attribute("Padding") is not null),
+            "Avalonia Grid does not expose Padding. Use a padded Border around a Grid instead.");
 
         StringAssert.Contains(behavior, "partial class InjectionWorkspace");
         StringAssert.Contains(channel, "V L1-E");
