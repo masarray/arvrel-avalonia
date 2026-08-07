@@ -153,16 +153,17 @@
                          VerticalAlignment="Center" />
             </Grid>
           </Border>
-          <Grid Grid.Row="1"
-                Background="#F7F9FA"
-                ColumnDefinitions="38,92,*,88"
-                ColumnSpacing="8"
-                Padding="9,0">
-            <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
-          </Grid>
+          <Border Grid.Row="1"
+                  Background="#F7F9FA"
+                  Padding="9,0">
+            <Grid ColumnDefinitions="38,92,*,88"
+                  ColumnSpacing="8">
+              <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
           <ItemsControl Grid.Row="2"
                         ItemsSource="{Binding CurrentInjectionChannels}"
                         ItemTemplate="{StaticResource InjectionChannelRowTemplate}" />
@@ -192,16 +193,17 @@
                          VerticalAlignment="Center" />
             </Grid>
           </Border>
-          <Grid Grid.Row="1"
-                Background="#F7F9FA"
-                ColumnDefinitions="38,92,*,88"
-                ColumnSpacing="8"
-                Padding="9,0">
-            <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
-          </Grid>
+          <Border Grid.Row="1"
+                  Background="#F7F9FA"
+                  Padding="9,0">
+            <Grid ColumnDefinitions="38,92,*,88"
+                  ColumnSpacing="8">
+              <TextBlock Grid.Column="0" Classes="testSetCaption" Text="ON" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Classes="testSetCaption" Text="CHANNEL" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="2" Classes="testSetCaption" Text="RMS" HorizontalAlignment="Right" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="3" Classes="testSetCaption" Text="ANGLE°" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
           <ItemsControl Grid.Row="2"
                         ItemsSource="{Binding VoltageInjectionChannels}"
                         ItemTemplate="{StaticResource InjectionChannelRowTemplate}" />
