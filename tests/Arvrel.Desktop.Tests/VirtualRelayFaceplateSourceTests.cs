@@ -76,10 +76,11 @@ public sealed class VirtualRelayFaceplateSourceTests
     }
 
     [TestMethod]
-    public void Faceplate_UsesExactPortableAnnunciationAndStableHardwareInteractionStates()
+    public void Faceplate_UsesExactPortableAnnunciationAndDedicatedHardwareControlTheme()
     {
         var faceplate = Read("src", "Arvrel.Desktop", "Controls", "VirtualRelayFaceplate.axaml");
         var faceplateBehavior = Read("src", "Arvrel.Desktop", "Controls", "VirtualRelayFaceplate.axaml.cs");
+        var app = Read("src", "Arvrel.Desktop", "App.axaml");
         var viewModel = Read("src", "Arvrel.Desktop", "ViewModels", "MainWindowViewModel.Faceplate.cs");
 
         StringAssert.Contains(faceplate, "LampState=\"{Binding PhaseAAnnunciation}\"");
@@ -93,23 +94,21 @@ public sealed class VirtualRelayFaceplateSourceTests
         StringAssert.Contains(faceplate, "FaceplateHomeCommand");
         StringAssert.Contains(faceplate, "FaceplateMenuCommand");
         StringAssert.Contains(faceplate, "FaceplateOkCommand");
-        StringAssert.Contains(faceplate, "Button.hardware:focus");
         StringAssert.Contains(faceplate, "FocusAdorner");
 
-        StringAssert.Contains(faceplateBehavior, "AttachedToVisualTree");
-        StringAssert.Contains(faceplateBehavior, "AttachHardwareButtonStates");
-        StringAssert.Contains(faceplateBehavior, "GetVisualDescendants");
-        StringAssert.Contains(faceplateBehavior, "candidate.Classes.Contains(\"hardware\")");
-        StringAssert.Contains(faceplateBehavior, "PointerEntered");
-        StringAssert.Contains(faceplateBehavior, "PointerExited");
-        StringAssert.Contains(faceplateBehavior, "PointerPressed");
-        StringAssert.Contains(faceplateBehavior, "PointerReleased");
-        StringAssert.Contains(faceplateBehavior, "GotFocus");
-        StringAssert.Contains(faceplateBehavior, "LostFocus");
-        StringAssert.Contains(faceplateBehavior, "HardwareHoverBackground");
-        StringAssert.Contains(faceplateBehavior, "HardwarePressedBackground");
-        StringAssert.Contains(faceplateBehavior, "button.Opacity = 1");
-        StringAssert.Contains(faceplateBehavior, "button.IsPointerOver");
+        StringAssert.Contains(app, "x:Key=\"RelayHardwareButtonTheme\"");
+        StringAssert.Contains(app, "TargetType=\"Button\"");
+        StringAssert.Contains(app, "x:Name=\"PART_RelayButtonBorder\"");
+        StringAssert.Contains(app, "x:Name=\"PART_ContentPresenter\"");
+        StringAssert.Contains(app, "Foreground=\"{TemplateBinding Foreground}\"");
+        StringAssert.Contains(app, "Selector=\"^:pointerover\"");
+        StringAssert.Contains(app, "Selector=\"^:pressed\"");
+        StringAssert.Contains(app, "Selector=\"^:focus-visible\"");
+        StringAssert.Contains(app, "#FFFFFF");
+
+        Assert.IsFalse(faceplateBehavior.Contains("PointerEntered", StringComparison.Ordinal));
+        Assert.IsFalse(faceplateBehavior.Contains("PointerPressed", StringComparison.Ordinal));
+        Assert.IsFalse(faceplateBehavior.Contains("GetVisualDescendants", StringComparison.Ordinal));
 
         StringAssert.Contains(viewModel, "RelayAnnunciationLatch");
         StringAssert.Contains(viewModel, "UpdateFaceplateState(ProtectionSnapshot snapshot)");
