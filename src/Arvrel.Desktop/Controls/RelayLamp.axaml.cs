@@ -7,7 +7,8 @@ namespace Arvrel.Desktop.Controls;
 
 public sealed partial class RelayLamp : UserControl
 {
-    private static readonly Color OffColor = Color.Parse("#34464F");
+    private static readonly Color OffColor = Color.Parse("#2A3A42");
+    private static readonly Color OffStrokeColor = Color.Parse("#53636A");
     private static readonly Color PickupColor = Color.Parse("#FFC94F");
     private static readonly Color TripColor = Color.Parse("#FF515C");
 
@@ -60,8 +61,15 @@ public sealed partial class RelayLamp : UserControl
 
     private void UpdateOptics()
     {
-        if (Lens is null || InnerGlow is null || Core is null || Halo is null)
+        if (Lens is null ||
+            InnerGlow is null ||
+            Core is null ||
+            Halo is null ||
+            GlossSoft is null ||
+            GlossSweep is null)
+        {
             return;
+        }
 
         if (LampState is { } state)
         {
@@ -91,23 +99,30 @@ public sealed partial class RelayLamp : UserControl
     private void SetOff()
     {
         Lens.Fill = new SolidColorBrush(OffColor);
+        Lens.Stroke = new SolidColorBrush(OffStrokeColor);
         InnerGlow.Fill = Brushes.Transparent;
         InnerGlow.Opacity = 0;
         Core.Fill = Brushes.Transparent;
         Core.Opacity = 0;
-        Halo.Fill = Brushes.Transparent;
         Halo.Opacity = 0;
+        GlossSoft.Opacity = 0.11;
+        GlossSweep.Opacity = 0.07;
     }
 
     private void SetActive(Color color)
     {
-        Lens.Fill = new SolidColorBrush(color);
-        InnerGlow.Fill = new SolidColorBrush(Color.FromArgb(230, color.R, color.G, color.B));
-        InnerGlow.Opacity = 0.82;
-        Core.Fill = new SolidColorBrush(BlendWithWhite(color, 0.72));
-        Core.Opacity = 1;
-        Halo.Fill = new SolidColorBrush(Color.FromArgb(155, color.R, color.G, color.B));
-        Halo.Opacity = 0.95;
+        Lens.Fill = new SolidColorBrush(BlendWithBlack(color, 0.10));
+        Lens.Stroke = new SolidColorBrush(BlendWithWhite(color, 0.22));
+
+        InnerGlow.Fill = new SolidColorBrush(Color.FromArgb(178, color.R, color.G, color.B));
+        InnerGlow.Opacity = 0.56;
+
+        Core.Fill = new SolidColorBrush(BlendWithWhite(color, 0.46));
+        Core.Opacity = 0.84;
+
+        Halo.Opacity = 0.48;
+        GlossSoft.Opacity = 0.24;
+        GlossSweep.Opacity = 0.13;
     }
 
     private static Color BlendWithWhite(Color color, double amount)
@@ -115,6 +130,21 @@ public sealed partial class RelayLamp : UserControl
         static byte Blend(byte channel, double factor)
             => (byte)Math.Clamp(
                 (int)Math.Round(channel + ((255 - channel) * factor)),
+                0,
+                255);
+
+        return Color.FromArgb(
+            255,
+            Blend(color.R, amount),
+            Blend(color.G, amount),
+            Blend(color.B, amount));
+    }
+
+    private static Color BlendWithBlack(Color color, double amount)
+    {
+        static byte Blend(byte channel, double factor)
+            => (byte)Math.Clamp(
+                (int)Math.Round(channel * (1 - factor)),
                 0,
                 255);
 
