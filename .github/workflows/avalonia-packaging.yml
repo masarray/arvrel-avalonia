@@ -141,7 +141,7 @@ jobs:
             -CommitSha '${{ github.sha }}'
 
       - name: Upload Windows packages
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-win-x64
           path: arvrel-avalonia/artifacts/packages/win-x64/*
@@ -202,7 +202,7 @@ jobs:
             '${{ github.sha }}'
 
       - name: Upload Linux packages
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-linux-x64
           path: arvrel-avalonia/artifacts/packages/linux-x64/*
@@ -263,7 +263,7 @@ jobs:
             '${{ github.sha }}'
 
       - name: Upload macOS packages
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-osx-arm64
           path: arvrel-avalonia/artifacts/packages/osx-arm64/*
@@ -278,7 +278,7 @@ jobs:
 
     steps:
       - name: Download all platform packages
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           pattern: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-*
           path: packages
@@ -306,7 +306,7 @@ jobs:
           sha256sum ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-* > SHA256SUMS-Avalonia.txt
 
       - name: Upload verified package set
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-verified-packages
           path: packages/*
@@ -325,7 +325,7 @@ jobs:
 
     steps:
       - name: Download verified package set
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ARVREL-Avalonia-v${{ needs.prepare.outputs.version }}-verified-packages
           path: packages
